@@ -27,17 +27,23 @@ import java.util.stream.Collectors;
 public class ElasticClient {
     private RestHighLevelClient highLevelClient;
 
-    @Value("${elasticsearch.default.index}")
+    @Value("${elasticsearch.highRest.host:127.0.0.1}")
+    private String host;
+
+    @Value("${elasticsearch.highRest.port:9200}")
+    private int port;
+
+    @Value("${elasticsearch.default.index:food}")
     private String index;
 
-    @Value("${elasticsearch.default.type}")
+    @Value("${elasticsearch.default.type:food}")
     private String type;
 
     @PostConstruct
     public void init() {
         highLevelClient = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("112.74.79.155", 9200, "http")));
+                        new HttpHost(host, port, "http")));
 
     }
 
