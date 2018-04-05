@@ -15,10 +15,11 @@ var configs = {
 
 function loadPage(url) {
     if (url) {
+        var st = url.lastIndexOf("//");
+        url = url.substring(st + 2);
         $("#url").val(url);
-    } else {
-        url = "http://localhost:8080/load?url=http://" + $("#url").val();
     }
+    url = "http://localhost:8080/load?url=http://" + $("#url").val();
     $("#target_page").attr("src", url);
     // if (window.event) window.event.preventDefault();
     $("#loading").removeClass("hidden");

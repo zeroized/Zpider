@@ -26,7 +26,11 @@
     <h3>新建爬虫</h3>
     <form>
         <div class="form-group">
-            <label for="seed" class="col-md-10">种子地址</label>
+            <label for="spider-name">爬虫名称</label>
+            <input type="text" class="form-control" name="spiderName" id="spider-name">
+        </div>
+        <div class="form-group">
+            <label for="seed">种子地址</label>
             <div class="input-group">
                 <span class="input-group-addon">http://</span>
                 <input type="text" class="form-control" name="seed" id="seed-input" placeholder="输入地址" required>
@@ -59,12 +63,25 @@
         </a>
         <div class="collapse" id="advanceOpt">
             <div class="form-group">
-                <label for="max-depth">最大爬取深度</label>
-                <input type="text" class="form-control" id="max-depth" value="10">
+                <label for="adv-workers">爬虫线程数</label>
+                <input type="number" class="form-control" id="adv-workers" value="1">
             </div>
             <div class="form-group">
-                <label for="max-page">最大爬取页面数</label>
-                <input type="text" class="form-control" id="max-page" value="500">
+                <label for="adv-max-depth">最大爬取深度</label>
+                <input type="number" class="form-control" id="adv-max-depth" value="10">
+            <#--<span class="help-block"></span>-->
+            </div>
+            <div class="form-group">
+                <label for="adv-max-page">最大爬取页面数</label>
+                <input type="number" class="form-control" id="adv-max-page" value="500">
+            </div>
+            <div class="form-group">
+                <label for="adv-polite-wait">等待时间</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="adv-polite-wait" value="1000">
+                    <div class="input-group-addon">ms</div>
+                </div>
+                <span class="help-block">每个爬虫线程爬取下一个页面前等待的时间</span>
             </div>
         </div>
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
