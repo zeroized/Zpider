@@ -27,7 +27,7 @@
     <form>
         <div class="form-group">
             <label for="spider-name">爬虫名称</label>
-            <input type="text" class="form-control" name="spiderName" id="spider-name">
+            <input type="text" class="form-control" name="spider-name" id="spider-name">
         </div>
         <div class="form-group">
             <label for="seed">种子地址</label>

@@ -16,6 +16,7 @@ public class CrawlControllerOptions {
     private boolean resumeable = false;
     private int delay = 500;
     private int depth = 20;
+    private int page;
     private Map<String, String> headers = new HashMap<>();
 
     public CrawlControllerOptions() {
@@ -80,5 +81,13 @@ public class CrawlControllerOptions {
 
     public void setHeaders(Map<String, String> headers) {
         this.headers.putAll(headers);
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 }

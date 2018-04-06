@@ -30,6 +30,9 @@ public class CrawlControllerFactory {
         config.setPolitenessDelay(options.getDelay());
         config.setResumableCrawling(options.isResumeable());
         config.setDefaultHeaders(options.getHeaders());
+        if (options.getPage() != -1) {
+            config.setMaxPagesToFetch(options.getPage());
+        }
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);

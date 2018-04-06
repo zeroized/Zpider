@@ -88,6 +88,12 @@ public class CrawlerController {
         List<Column> columns = crawlRequest.getColumns();
 
         CrawlControllerOptions options = CrawlControllerOptions.defaultOptions();
+        options.setWorkers(crawlRequest.getAdvancedOpt().getWorkers());
+        options.setDelay(crawlRequest.getAdvancedOpt().getPoliteWait());
+        options.setDepth(crawlRequest.getAdvancedOpt().getMaxDepth());
+        options.setPage(crawlRequest.getAdvancedOpt().getMaxPage());
+        options.setDir(crawlRequest.getName() + "\\");
+
         CrawlController crawlController = crawlControllerFactory.newController(options);
 
         PublishSubject<Map<String, ?>> crawlSubject = PublishSubject.create();

@@ -269,7 +269,14 @@ function startCrawler(e) {
         seeds: seed_array,
         allowDomains: domain_array,
         crawlUrlPrefixes: crawl_array,
-        columns: column_array
+        columns: column_array,
+        advancedOpt: {
+            workers: $("#adv-workers").val(),
+            maxDepth: $("#adv-max-depth").val(),
+            maxPage: $("#adv-max-page").val(),
+            politeWait: $("#adv-polite-wait").val()
+        },
+        name: $("#spider-name").val()
     };
 
     // alert(JSON.stringify(data));

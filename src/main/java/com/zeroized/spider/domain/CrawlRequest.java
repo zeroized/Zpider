@@ -10,6 +10,8 @@ public class CrawlRequest {
     private List<String> allowDomains;
     private List<String> crawlUrlPrefixes;
     private List<Column> columns;
+    private CrawlRequestAdvancedOption advancedOpt;
+    private String name;
 
     public CrawlRequest() {
     }
@@ -44,5 +46,21 @@ public class CrawlRequest {
 
     public void setColumns(List<Column> columns) {
         this.columns = columns;
+    }
+
+    public CrawlRequestAdvancedOption getAdvancedOpt() {
+        return advancedOpt;
+    }
+
+    public void setAdvancedOpt(CrawlRequestAdvancedOption advancedOpt) {
+        this.advancedOpt = advancedOpt;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
