@@ -9,6 +9,8 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @Repository
 public class ElasticClient {
     private RestHighLevelClient highLevelClient;
+    private static final Logger logger = LoggerFactory.getLogger(ElasticClient.class);
 
     @Value("${elasticsearch.highRest.host:127.0.0.1}")
     private String host;
@@ -44,7 +47,14 @@ public class ElasticClient {
         highLevelClient = new RestHighLevelClient(
                 RestClient.builder(
                         new HttpHost(host, port, "http")));
-
+        try {
+            if (highLevelClient.ping()) {
+                logger.info("Elasticsearch server connected on " + host + ":" + port);
+                logger.info("Current index is " + index);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createIndex(String index) {
@@ -69,6 +79,23 @@ public class ElasticClient {
         return Arrays.stream(bulkResponse.getItems())
                 .map(BulkItemResponse::getId)
                 .collect(Collectors.toList());
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        logger.info("Current index has changed from " + this.index + " to " + index);
+        this.index = index;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @PreDestroy
