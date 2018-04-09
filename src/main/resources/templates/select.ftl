@@ -22,7 +22,8 @@
         <p class="navbar-text navbar-right">version 0.0.1</p>
     </div><!-- /.container-fluid -->
 </nav>
-<div class="col-md-3 slider">
+<div class="col-md-3 slider" id="left">
+    <a style="float: right;margin-top: 20px;color: #cc450c" href="javascript:void " onclick="myClick(0);"><<</a>
     <h3>新建爬虫</h3>
     <form>
         <div class="form-group">
@@ -173,11 +174,17 @@
         <button type="button" class="btn btn-primary" onclick="startCrawler(event)">启动爬虫</button>
     </form>
 </div>
-<div class="col-md-6 content" id="content">
-    <div class="panel panel-default">
+<div class="col-md-6 content"  id="content">
+    <div id="leftshow"  style="float:left;width: 18px;margin-top: 15px;display: none">
+    <a href="javascript:void " onclick="myClick(1);"style="color: #cc2b3b">>></a>
+    </div>
+    <div id="rightshow"  style="float:right;width: 18px;margin-top: 15px;display: none">
+        <a href="javascript:void " onclick="myClick(2);"style="color: #cc2b3b"><<</a>
+    </div>
+    <div class="panel panel-default"style="margin-left: 18px;margin-right: 18px">
         <div class="panel-heading">
             <div class="row">
-                <form class="form-inline col-md-9" onsubmit="return loadPage()">
+                <form class="form col-md-9" onsubmit="return loadPage()">
                     <label class="sr-only" for="url">URL</label>
                     <div class="input-group">
                         <div class="input-group-btn">
@@ -211,11 +218,11 @@
                         </div>
                     </div>
                 </form>
-                <div class="btn-group col-md-3">
-                    <button type="button" class="btn btn-primary" onclick="turn(true)"
+                <div class="btn-group col-md-3" style="margin-top: 0px">
+                    <button type="button" class="btn btn-primary pull-right" onclick="turn(true)"
                             data-toggle="tooltip" data-placement="top" title="开始解析页面，将不能正常浏览页面">解析
                     </button>
-                    <button type="button" class="btn btn-danger" onclick="turn(false)"
+                    <button type="button" class="btn btn-danger pull-right" onclick="turn(false)"
                             data-toggle="tooltip" data-placement="top" title="停止解析，可以正常浏览页面">停止
                     </button>
                 </div>
@@ -226,7 +233,8 @@
         </div>
     </div>
 </div>
-<div class="col-md-3 slider">
+<div class="col-md-3 slider" id="right">
+    <a style="float: right;margin-top: 20px;color: #cc450c" href="javascript:void " onclick="myClick(3);">>></a>
     <h5>节点信息</h5>
     <form>
         <div class="form-group-sm">
@@ -279,4 +287,40 @@
     </form>
 </div>
 </body>
+<script type="text/javascript">
+    var a1=1; //左侧隐藏为0，显示为1
+    var a2=1; //右侧隐藏为0，显示为1
+function myClick(t) {
+    if(t==0){
+        $('#left').fadeOut(150);
+        $('#leftshow').show();
+        a1=0;
+    }
+    if(t==1){
+        $('#left').fadeIn(150);
+        $('#leftshow').hide();
+        a1=1;
+    }
+    if(t==3){
+        $('#right').fadeOut(150);
+        $('#rightshow').show();
+        a2=0;
+    } if(t==2){
+        $('#right').fadeIn(150);
+        $('#rightshow').hide();
+        a2=1;
+    }
+    if(a1==0&&a2==0) {
+        $('#content').attr('class', 'col-md-12 content');
+    }else if(a1==1&&a2==1){
+        $('#content').attr('class', 'col-md-6 content');
+    }else {
+        $('#content').attr('class', 'col-md-9 content');
+    }
+
+
+
+}
+
+</script>
 </html>
