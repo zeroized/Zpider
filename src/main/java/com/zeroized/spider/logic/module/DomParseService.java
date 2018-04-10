@@ -1,4 +1,4 @@
-package com.zeroized.spider.parse;
+package com.zeroized.spider.logic.module;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
  * Created by Zero on 2018/3/15.
  */
 @Service
-public class IframeParseDom {
-    public String proxySub(String html, String domain) {
+public class DomParseService {
+    public String parseIFrameProxy(String html, String domain) {
         Document doc = Jsoup.parse(html);
         Elements headCss = doc.head().select("link");
         for (Element css : headCss) {

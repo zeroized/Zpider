@@ -1,6 +1,9 @@
 package com.zeroized.spider.crawler;
 
 import org.apache.http.message.BasicHeader;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +13,19 @@ import java.util.stream.Collectors;
 /**
  * Created by Zero on 2018/3/22.
  */
+@Component
+@Scope("prototype")
 public class CrawlControllerOptions {
-    private int workers = 1;
-    private String dir = "test\\";
+    @Value("${crawler.config.default.workers}")
+    private int workers;
+    @Value("${crawler.config.default.dir}")
+    private String dir;
     private boolean resumeable = false;
+    @Value("${crawler.config.default.polite-wait}")
     private int delay = 500;
+    @Value("${crawler.config.default.max-depth}")
     private int depth = 20;
+    @Value("${crawler.config.default.max-page}")
     private int page;
     private Map<String, String> headers = new HashMap<>();
 

@@ -1,6 +1,6 @@
 package com.zeroized.spider.controller;
 
-import com.zeroized.spider.parse.IframeParseDom;
+import com.zeroized.spider.logic.module.DomParseService;
 import com.zeroized.spider.util.HttpRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +17,11 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/")
 public class PageController {
-    private final IframeParseDom iframeParseDom;
+    private final DomParseService domParseService;
 
     @Autowired
-    public PageController(IframeParseDom iframeParseDom) {
-        this.iframeParseDom = iframeParseDom;
+    public PageController(DomParseService domParseService) {
+        this.domParseService = domParseService;
     }
 
     @RequestMapping("/")
@@ -42,7 +42,7 @@ public class PageController {
             domain = url.substring(domainStartPos, domainEndPos);
         }
         System.out.println("domain" + domain);
-        String html = iframeParseDom.proxySub(resp, domain);
+        String html = domParseService.parseIFrameProxy(resp, domain);
 //        System.out.println(html);
         return html;
     }

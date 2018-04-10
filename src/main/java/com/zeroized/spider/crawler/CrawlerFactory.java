@@ -1,21 +1,18 @@
 package com.zeroized.spider.crawler;
 
+import com.zeroized.spider.rx.CrawlerObservable;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
-import edu.uci.ics.crawler4j.crawler.WebCrawler;
-import io.reactivex.subjects.PublishSubject;
-
-import java.util.Map;
 
 /**
  * Created by Zero on 2018/3/22.
  */
-public class CrawlerFactory implements CrawlController.WebCrawlerFactory {
+public class CrawlerFactory implements CrawlController.WebCrawlerFactory<Crawler> {
     private CrawlerOptions options;
-    private PublishSubject<Map<String, ?>> publishSubject;
+    private CrawlerObservable crawlerObservable;
 
-    public CrawlerFactory(CrawlerOptions options, PublishSubject<Map<String, ?>> publishSubject) {
+    public CrawlerFactory(CrawlerOptions options, CrawlerObservable crawlerObservable) {
         this.options = options;
-        this.publishSubject = publishSubject;
+        this.crawlerObservable = crawlerObservable;
     }
 
     public CrawlerOptions getOptions() {
@@ -27,7 +24,7 @@ public class CrawlerFactory implements CrawlController.WebCrawlerFactory {
     }
 
     @Override
-    public WebCrawler newInstance() {
-        return new Crawler(options, publishSubject);
+    public Crawler newInstance() {
+        return new Crawler(options, crawlerObservable);
     }
 }

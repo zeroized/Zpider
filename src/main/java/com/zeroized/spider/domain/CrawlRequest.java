@@ -10,7 +10,7 @@ public class CrawlRequest {
     private List<String> allowDomains;
     private List<String> crawlUrlPrefixes;
     private List<Column> columns;
-    private CrawlRequestAdvancedOption advancedOpt;
+    private CrawlAdvancedOption advancedOpt;
     private String name;
 
     public CrawlRequest() {
@@ -48,11 +48,11 @@ public class CrawlRequest {
         this.columns = columns;
     }
 
-    public CrawlRequestAdvancedOption getAdvancedOpt() {
+    public CrawlAdvancedOption getAdvancedOpt() {
         return advancedOpt;
     }
 
-    public void setAdvancedOpt(CrawlRequestAdvancedOption advancedOpt) {
+    public void setAdvancedOpt(CrawlAdvancedOption advancedOpt) {
         this.advancedOpt = advancedOpt;
     }
 

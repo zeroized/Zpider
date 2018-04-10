@@ -13,14 +13,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CrawlControllerFactory {
-    @Value("${crawler.config.storageBaseDir}")
+    @Value("${crawler.config.storage-dir}")
     private String baseDir;
 
     public CrawlControllerFactory() {
-    }
-
-    public static CrawlControllerOptions defaultOptions() {
-        return new CrawlControllerOptions();
     }
 
     public CrawlController newController(CrawlControllerOptions options) throws Exception {

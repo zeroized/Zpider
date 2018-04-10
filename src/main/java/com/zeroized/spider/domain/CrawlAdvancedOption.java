@@ -3,13 +3,13 @@ package com.zeroized.spider.domain;
 /**
  * Created by Zero on 2018/4/6.
  */
-public class CrawlRequestAdvancedOption {
+public class CrawlAdvancedOption {
     private int workers;
     private int maxDepth;
     private int maxPage;
     private int politeWait;
 
-    public CrawlRequestAdvancedOption() {
+    public CrawlAdvancedOption() {
     }
 
     public int getWorkers() {
