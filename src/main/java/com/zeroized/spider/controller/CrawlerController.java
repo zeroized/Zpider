@@ -47,7 +47,7 @@ public class CrawlerController {
 //        options.setDelay(crawlRequest.getAdvancedOpt().getPoliteWait());
 //        options.setDepth(crawlRequest.getAdvancedOpt().getMaxDepth());
 //        options.setPage(crawlRequest.getAdvancedOpt().getMaxPage());
-//        options.setDir(crawlRequest.getName() + "\\");
+//        options.setDir(crawlRequest.getSpiderName() + "\\");
 //
 //        CrawlController crawlController = crawlControllerFactory.newController(options);
 //

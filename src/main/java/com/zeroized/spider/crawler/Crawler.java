@@ -61,11 +61,12 @@ public class Crawler extends WebCrawler {
         DataEntity dataEntity = new DataEntity();
         Map<String, List<String>> data = new HashMap<>();
         List<String> warningColumns = new LinkedList<>();
+        List<String> images = new LinkedList<>();
         for (Column column : crawlerOptions.getColumns()) {
             String name = column.getColumn();
             String rule = column.getRule();
             Elements eles = doc.select(rule);
-            if (eles.size() == 0) {
+            if (eles.isEmpty()) {
                 warningColumns.add(name);
                 continue;
             }
@@ -80,9 +81,10 @@ public class Crawler extends WebCrawler {
                 case "img":
                     for (Element ele : eles) {
                         String picSrc = ele.attr("src");
-                        ImageEntity imageEntity = new ImageEntity(id, picSrc);
-                        crawlerObservable.produceImage(imageEntity);
+                        images.add(picSrc);
                     }
+                    ImageEntity imageEntity = new ImageEntity(id, crawlerOptions.getType(), images, column.getColumn());
+                    crawlerObservable.produceImage(imageEntity);
                     break;
             }
         }

@@ -32,7 +32,7 @@ public class PageController {
     @RequestMapping("/load")
     public @ResponseBody
     String load(@RequestParam String url) throws IOException {
-        String resp = HttpRequestUtil.get(url);
+        String resp = HttpRequestUtil.getHtml(url);
         int domainStartPos = url.indexOf("//") + 2;
         int domainEndPos = url.indexOf("/", domainStartPos);
         String domain;
@@ -50,7 +50,7 @@ public class PageController {
     @RequestMapping("/proxy")
     public @ResponseBody
     String proxy(@RequestParam String url) throws IOException {
-        String resp = HttpRequestUtil.get(url);
+        String resp = HttpRequestUtil.getHtml(url);
         return resp;
     }
 }
