@@ -1,5 +1,6 @@
 package com.zeroized.spider.repo.elastic;
 
+import com.zeroized.spider.domain.observable.DataEntity;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -68,7 +69,20 @@ public class ElasticClient {
         return indexResponse.getId();
     }
 
-    public List<String> bulkIndex(List<Map<String, ?>> docs) throws IOException {
+    public List<String> bulkIndex(List<DataEntity> docs) throws IOException {
+        BulkRequest bulkRequest = new BulkRequest();
+        for (DataEntity doc : docs) {
+            IndexRequest indexRequest = new IndexRequest(index, doc.getType(), doc.getId());
+            indexRequest.source(doc.getData());
+            bulkRequest.add(indexRequest);
+        }
+        BulkResponse bulkResponse = highLevelClient.bulk(bulkRequest);
+        return Arrays.stream(bulkResponse.getItems())
+                .map(BulkItemResponse::getId)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> bulkIndex(List<Map<String, ?>> docs, String type) throws IOException {
         BulkRequest bulkRequest = new BulkRequest();
         for (Map<String, ?> doc : docs) {
             IndexRequest indexRequest = new IndexRequest(index, type);

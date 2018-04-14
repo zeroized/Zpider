@@ -11,14 +11,16 @@ public class CrawlerOptions {
     private List<String> allowDomains;
     private List<String> crawlUrlPrefixes;
     private List<Column> columns;
+    private String type;
 
     public CrawlerOptions() {
     }
 
-    public CrawlerOptions(List<String> allowDomains, List<String> crawlUrlPrefixes, List<Column> columns) {
+    public CrawlerOptions(List<String> allowDomains, List<String> crawlUrlPrefixes, List<Column> columns, String type) {
         this.allowDomains = allowDomains;
         this.crawlUrlPrefixes = crawlUrlPrefixes;
         this.columns = columns;
+        this.type = type;
     }
 
     public List<String> getAllowDomains() {
@@ -52,5 +54,13 @@ public class CrawlerOptions {
                 ", crawlUrlPrefixes=" + crawlUrlPrefixes.toString() +
                 ", columns=" + columns.toString() +
                 '}';
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

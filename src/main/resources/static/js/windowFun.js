@@ -208,11 +208,15 @@ function addColumn() {
     var name = $("#column-input-name").val();
     var dom = $("#column-input-dom").val();
     var id = configs.column.id;
+    var type = $("#column-input-type").val();
     if (configs.column[name]) {
         alert("该字段已存在!");
     } else {
         addTableRow("column", id, name, true);
-        configs.column[name] = dom;
+        configs.column[name] = {
+            dom: dom,
+            type: type
+        };
         configs.crawl.id++;
     }
     return false;
@@ -259,7 +263,8 @@ function startCrawler(e) {
             if (key !== 'id') {
                 column_array.push({
                     column: key,
-                    rule: columns[key]
+                    rule: columns[key].dom,
+                    type: columns[key].type
                 });
             }
         }

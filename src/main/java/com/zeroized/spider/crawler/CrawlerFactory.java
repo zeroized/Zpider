@@ -1,6 +1,6 @@
 package com.zeroized.spider.crawler;
 
-import com.zeroized.spider.rx.CrawlerObservable;
+import com.zeroized.spider.logic.rx.CrawlerObservable;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 
 /**

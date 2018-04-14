@@ -54,7 +54,7 @@ public class CrawlerController {
 //        PublishSubject<Map<String, ?>> crawlSubject = PublishSubject.create();
 //        crawlSubject.buffer(60, TimeUnit.SECONDS, Schedulers.computation(), 20,
 //                () -> Collections.synchronizedList(new LinkedList<>()), true)
-//                .subscribe(
+//                .subscribeData(
 //                        elasticRepo::generateBulkIndex
 ////                        System.out::println
 //                );

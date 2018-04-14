@@ -6,13 +6,15 @@ package com.zeroized.spider.domain;
 public class Column {
     private String column;
     private String rule;
+    private String type;
 
     public Column() {
     }
 
-    public Column(String column, String rule) {
+    public Column(String column, String rule, String type) {
         this.column = column;
         this.rule = rule;
+        this.type = type;
     }
 
     public String getColumn() {
@@ -36,6 +38,15 @@ public class Column {
         return "Column{" +
                 "column='" + column + '\'' +
                 ", rule='" + rule + '\'' +
+                ", type='" + type + '\'' +
                 '}';
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

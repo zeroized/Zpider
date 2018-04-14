@@ -181,7 +181,7 @@
     <div id="rightshow"  style="float:right;width: 18px;margin-top: 15px;display: none">
         <a href="javascript:void " onclick="myClick(2);"style="color: #cc2b3b"><<</a>
     </div>
-    <div class="panel panel-default"style="margin-left: 18px;margin-right: 18px">
+    <div class="panel panel-default" style="margin-left: 18px;margin-right: 18px">
         <div class="panel-heading">
             <div class="row">
                 <form class="form col-md-9" onsubmit="return loadPage()">
@@ -219,11 +219,11 @@
                     </div>
                 </form>
                 <div class="btn-group col-md-3" style="margin-top: 0px">
-                    <button type="button" class="btn btn-primary pull-right" onclick="turn(true)"
-                            data-toggle="tooltip" data-placement="top" title="开始解析页面，将不能正常浏览页面">解析
-                    </button>
                     <button type="button" class="btn btn-danger pull-right" onclick="turn(false)"
                             data-toggle="tooltip" data-placement="top" title="停止解析，可以正常浏览页面">停止
+                    </button>
+                    <button type="button" class="btn btn-primary pull-right" onclick="turn(true)"
+                            data-toggle="tooltip" data-placement="top" title="开始解析页面，将不能正常浏览页面">解析
                     </button>
                 </div>
             </div>
@@ -264,6 +264,7 @@
             <label for="column-input-type">爬取对象</label>
             <select class="form-control" id="column-input-type">
                 <option value="text" selected>text</option>
+                <option value="img">img</option>
             <#--<option value="html">html</option>-->
             </select>
         </div>

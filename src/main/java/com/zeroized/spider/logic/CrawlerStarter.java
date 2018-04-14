@@ -6,7 +6,7 @@ import com.zeroized.spider.crawler.CrawlerFactory;
 import com.zeroized.spider.crawler.CrawlerOptions;
 import com.zeroized.spider.domain.Column;
 import com.zeroized.spider.domain.CrawlAdvancedOption;
-import com.zeroized.spider.rx.CrawlerObservable;
+import com.zeroized.spider.logic.rx.CrawlerObservable;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,7 +38,7 @@ public class CrawlerStarter {
 
         CrawlController crawlController = crawlControllerFactory.newController(options);
 
-        CrawlerOptions crawlerOptions = new CrawlerOptions(allowDomains, crawlUrlPrefixes, columns);
+        CrawlerOptions crawlerOptions = new CrawlerOptions(allowDomains, crawlUrlPrefixes, columns, name);
         CrawlerFactory crawlerFactory = new CrawlerFactory(crawlerOptions, crawlerObservable);
         for (String seed : seeds) {
             crawlController.addSeed(seed);

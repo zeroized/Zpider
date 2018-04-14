@@ -1,8 +1,11 @@
 package com.zeroized.spider.crawler;
 
 import com.zeroized.spider.domain.Column;
-import com.zeroized.spider.domain.WarningEntity;
-import com.zeroized.spider.rx.CrawlerObservable;
+import com.zeroized.spider.domain.observable.DataEntity;
+import com.zeroized.spider.domain.observable.ImageEntity;
+import com.zeroized.spider.domain.observable.WarningEntity;
+import com.zeroized.spider.logic.rx.CrawlerObservable;
+import com.zeroized.spider.util.IdGenerator;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
@@ -50,9 +53,12 @@ public class Crawler extends WebCrawler {
     }
 
     private void analyze(Page page) {
+        String id = IdGenerator.generateUUID();
         HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
         String html = htmlParseData.getHtml();
         Document doc = Jsoup.parse(html);
+
+        DataEntity dataEntity = new DataEntity();
         Map<String, List<String>> data = new HashMap<>();
         List<String> warningColumns = new LinkedList<>();
         for (Column column : crawlerOptions.getColumns()) {
@@ -63,17 +69,33 @@ public class Crawler extends WebCrawler {
                 warningColumns.add(name);
                 continue;
             }
-            List<String> values = new ArrayList<>(eles.size());
-            for (Element ele : eles) {
-                values.add(ele.text());
+            switch (column.getType()) {
+                case "text":
+                    List<String> values = new ArrayList<>(eles.size());
+                    for (Element ele : eles) {
+                        values.add(ele.text());
+                    }
+                    data.put(name, values);
+                    break;
+                case "img":
+                    for (Element ele : eles) {
+                        String picSrc = ele.attr("src");
+                        ImageEntity imageEntity = new ImageEntity(id, picSrc);
+                        crawlerObservable.produceImage(imageEntity);
+                    }
+                    break;
             }
-            data.put(name, values);
         }
-//        System.out.println(data);
-        crawlerObservable.produce(data);
+        if (!data.isEmpty()) {
+            dataEntity.setId(id);
+            dataEntity.setType(crawlerOptions.getType());
+            dataEntity.setData(data);
+            crawlerObservable.productData(dataEntity);
+        }
+
         if (warningColumns.size() != 0) {
             String url = page.getWebURL().getURL();
-            crawlerObservable.produceWarning(new WarningEntity(url, warningColumns));
+            crawlerObservable.produceWarning(new WarningEntity(id, url, warningColumns));
         }
 //        System.out.println(data.toString());
     }
