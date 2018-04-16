@@ -1,5 +1,6 @@
 package com.zeroized.spider.util;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -8,8 +9,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by Zero on 2018/3/11.
@@ -47,8 +48,9 @@ public class HttpRequestUtil {
         return resp;
     }
 
-    public static InputStream getImage(String url) throws IOException {
+    public static File getImage(String url, String filePath) throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            final File image = new File(filePath);
             HttpGet httpget = new HttpGet(url);
 
             httpget.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
@@ -60,11 +62,13 @@ public class HttpRequestUtil {
             System.out.println("Fetching image from " + httpget.getRequestLine());
 
             // Create a custom response handler
-            ResponseHandler<InputStream> responseHandler = response -> {
+            ResponseHandler<File> responseHandler = response -> {
                 int status = response.getStatusLine().getStatusCode();
                 if (status >= 200 && status < 300) {
                     HttpEntity entity = response.getEntity();
-                    return entity != null ? entity.getContent() : null;
+//                    return entity.getContent();
+                    FileUtils.copyToFile(entity.getContent(), image);
+                    return image;
                 } else {
                     throw new ClientProtocolException("Unexpected response status: " + status);
                 }

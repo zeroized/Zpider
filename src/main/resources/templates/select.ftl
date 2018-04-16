@@ -219,11 +219,11 @@
                     </div>
                 </form>
                 <div class="btn-group col-md-3" style="margin-top: 0px">
-                    <button type="button" class="btn btn-danger pull-right" onclick="turn(false)"
-                            data-toggle="tooltip" data-placement="top" title="停止解析，可以正常浏览页面">停止
-                    </button>
-                    <button type="button" class="btn btn-primary pull-right" onclick="turn(true)"
+                    <button type="button" class="btn btn-primary" onclick="turn(true)"
                             data-toggle="tooltip" data-placement="top" title="开始解析页面，将不能正常浏览页面">解析
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="turn(false)"
+                            data-toggle="tooltip" data-placement="top" title="停止解析，可以正常浏览页面">停止
                     </button>
                 </div>
             </div>
