@@ -29,7 +29,7 @@ public class CrawlerStarter {
 
     public void start(String name, List<String> seeds, List<String> allowDomains, List<String> crawlUrlPrefixes,
                       List<Column> columns, CrawlAdvancedOption advancedOption) throws Exception {
-        CrawlControllerOptions options = CrawlControllerOptions.defaultOptions();
+        CrawlControllerOptions options = crawlControllerFactory.createOption();
         options.setWorkers(advancedOption.getWorkers());
         options.setDelay(advancedOption.getPoliteWait());
         options.setDepth(advancedOption.getMaxDepth());

@@ -16,7 +16,7 @@ import java.io.IOException;
  * Created by Zero on 2018/3/11.
  */
 public class HttpRequestUtil {
-    public static String getHtml(String url) throws IOException {
+    public static String get(String url) throws IOException {
         String resp;
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             HttpGet httpget = new HttpGet(url);

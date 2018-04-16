@@ -16,7 +16,28 @@ public class CrawlControllerFactory {
     @Value("${crawler.config.storage-dir}")
     private String baseDir;
 
+    @Value("${crawler.config.default.workers}")
+    private int workers;
+
+    @Value("${crawler.config.default.dir}")
+    private String dir;
+
+    private boolean resumeable = false;
+
+    @Value("${crawler.config.default.polite-wait}")
+    private int delay;
+
+    @Value("${crawler.config.default.max-depth}")
+    private int depth;
+
+    @Value("${crawler.config.default.max-page}")
+    private int page;
+
     public CrawlControllerFactory() {
+    }
+
+    public CrawlControllerOptions createOption() {
+        return new CrawlControllerOptions(workers, dir, resumeable, delay, depth, page);
     }
 
     public CrawlController newController(CrawlControllerOptions options) throws Exception {

@@ -1,9 +1,6 @@
 package com.zeroized.spider.crawler;
 
 import org.apache.http.message.BasicHeader;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,32 +10,34 @@ import java.util.stream.Collectors;
 /**
  * Created by Zero on 2018/3/22.
  */
-@Component
-@Scope("prototype")
 public class CrawlControllerOptions {
-    @Value("${crawler.config.default.workers}")
+
     private int workers;
-    @Value("${crawler.config.default.dir}")
+
     private String dir;
+
     private boolean resumeable = false;
-    @Value("${crawler.config.default.polite-wait}")
-    private int delay = 500;
-    @Value("${crawler.config.default.max-depth}")
-    private int depth = 20;
-    @Value("${crawler.config.default.max-page}")
+
+    private int delay;
+
+    private int depth;
+
     private int page;
+
     private Map<String, String> headers = new HashMap<>();
 
-    public CrawlControllerOptions() {
+    public CrawlControllerOptions(int workers, String dir, boolean resumeable, int delay, int depth, int page) {
+        this.workers = workers;
+        this.dir = dir;
+        this.resumeable = resumeable;
+        this.delay = delay;
+        this.depth = depth;
+        this.page = page;
         headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
         headers.put("Accept-Encoding", "gzip, deflate");
         headers.put("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
         headers.put("Connection", "keep-alive");
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0");
-    }
-
-    public static CrawlControllerOptions defaultOptions() {
-        return new CrawlControllerOptions();
     }
 
     public int getWorkers() {
