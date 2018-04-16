@@ -27,14 +27,14 @@
     <h3>新建爬虫</h3>
     <form>
         <div class="form-group">
-            <label for="spider-spiderName">爬虫名称</label>
-            <input type="text" class="form-control" spiderName="spider-spiderName" id="spider-spiderName">
+            <label for="spider-name">爬虫名称</label>
+            <input type="text" class="form-control" name="spider-name" id="spider-name">
         </div>
         <div class="form-group">
             <label for="seed">种子地址</label>
             <div class="input-group">
                 <span class="input-group-addon">http://</span>
-                <input type="text" class="form-control" spiderName="seed" id="seed-input" placeholder="输入地址" required>
+                <input type="text" class="form-control" name="seed" id="seed-input" placeholder="输入地址" required>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" onclick="addSeed()">添加</button>
                 </span>
@@ -269,8 +269,8 @@
             </select>
         </div>
         <div class="form-group-sm">
-            <label for="column-input-spiderName">数据字段名称</label>
-            <input type="text" class="form-control" id="column-input-spiderName" required>
+            <label for="column-input-name">数据字段名称</label>
+            <input type="text" class="form-control" id="column-input-name" required>
         </div>
         <div class="form-group-sm">
             <div class="row">
