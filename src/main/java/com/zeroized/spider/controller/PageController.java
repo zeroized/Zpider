@@ -29,6 +29,11 @@ public class PageController {
         return new ModelAndView("select");
     }
 
+    @RequestMapping("/create")
+    public ModelAndView create() {
+        return new ModelAndView("create");
+    }
+
     @RequestMapping("/load")
     public @ResponseBody
     String load(@RequestParam String url) throws IOException {
@@ -41,7 +46,7 @@ public class PageController {
         } else {
             domain = url.substring(domainStartPos, domainEndPos);
         }
-        System.out.println("domain" + domain);
+        System.out.println("domain: " + domain);
         String html = domParseService.parseIFrameProxy(resp, domain);
 //        System.out.println(html);
         return html;

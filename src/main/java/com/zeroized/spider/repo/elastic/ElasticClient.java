@@ -48,14 +48,14 @@ public class ElasticClient {
         highLevelClient = new RestHighLevelClient(
                 RestClient.builder(
                         new HttpHost(host, port, "http")));
-        try {
-            if (highLevelClient.ping()) {
-                logger.info("Elasticsearch server connected on " + host + ":" + port);
-                logger.info("Current index is " + index);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            if (highLevelClient.ping()) {
+//                logger.info("Elasticsearch server connected on " + host + ":" + port);
+//                logger.info("Current index is " + index);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void createIndex(String index) {
