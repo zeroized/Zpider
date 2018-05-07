@@ -1,20 +1,147 @@
 html, body {
     height: 100%;
+    font-family: "Microsoft YaHei UI", serif;
+    /*font-size: small;*/
 }
 
 textarea {
     resize: none;
 }
 
+.btn {
+    border-radius: 0 !important;
+    /*border: none;*/
+    /*color: white;*/
+}
+
+.form-control {
+    border-radius: 0;
+}
+
 .navbar {
     margin-bottom: 0;
+    /*background-color: dimgrey;*/
+}
+
+.version-label {
+    padding-right: 20px;
 }
 
 .slider {
-    background-color: #f8f8f8;
-    border-left: 1px solid #e7e7e7;
-    border-right: 1px solid #e7e7e7;
+    background-color: #333744;
     height: calc(100% - 51px);
+    /*width: calc(25% - 2px);*/
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.slider-content {
+    width: 100%;
+}
+
+.slider .btn-create {
+    margin-top: 20px;
+    background-color: #00bbbb !important;
+}
+
+.slider .btn {
+    background-color: #42485b;
+    color: white;
+    border: none;
+}
+
+.slider .slider-content .btn {
+    text-align: left;
+    padding-left: 18px;
+}
+
+.slider .slider-content .slider-label {
+    margin-left: 10px;
+}
+
+.slider .slider-content > ul > li > a:hover {
+    background-color: #00bbbb !important;
+}
+
+.btn-collapse {
+    border-radius: 0;
+    background-color: #4a5064 !important;
+}
+
+.slider-collapse {
+    width: 50px;
+    float: left;
+}
+
+.opt-group .panel {
+    border: none;
+}
+
+.opt-group .panel-heading {
+    background-color: #f8f8f8;
+}
+
+.tab-content {
+    height: 100%;
+}
+
+.tab-pane {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.content {
+    height: calc(100% - 51px);
+    background-color: #eaedf1;;
+}
+
+.content-collapse {
+    width: calc(100% - 50px);
+    float: left;
+}
+
+.basic-panel {
+    background-color: white;
+    margin-top: 20px;
+    height: calc(100% - 40px);
+    padding: 10px;
+}
+
+.frame-panel {
+    height: calc(100% - 40px);
+    margin-top: 20px;
+    margin-bottom: 0;
+    border: none;
+}
+
+.frame-control-btn {
+    min-width: 120px;
+    float: right;
+}
+
+.protocol-dropdown {
+    width: 60px;
+}
+
+.panel {
+    border-radius: 0;
+    border: none;
+}
+
+.panel-heading {
+    border-radius: 0;
+    border: none;
+}
+
+.panel-body {
+    padding: 0;
+    height: calc(100% - 55px);
+    border: none;
+    border-radius: 0;
+}
+
+.panel-group {
+    border: none;
 }
 
 .frame {
@@ -22,20 +149,44 @@ textarea {
     height: 100%;
 }
 
-.content {
-    height: calc(100% - 51px);
-}
-
-.panel {
-    height: 100%;
-    margin-bottom: 0;
-}
-
-.panel-body {
-    padding: 0;
-    height: calc(100% - 55px);
-}
-
-.panel-group {
+.slider-right {
     border: none;
+    border-radius: 0;
+    margin-top: 20px;
+    /*padding: 10px;*/
+    background-color: white;
+    /*height: calc(100% - 40px);*/
+    /*height: calc(100% - 20px);*/
+}
+
+.slider-right > ul > li > a {
+    border-radius: 0 !important;
+}
+
+.slider-right .list-unstyled {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.slider-right .slider-right-content {
+    padding: 10px;
+}
+
+.slider-right-show {
+    margin-top: 20px;
+    background-color: white;
+}
+
+.adv-opt-table > tbody > tr > td:last-child {
+    /*float: right;*/
+    text-align: right;
+}
+
+.confirm-panel .panel-heading {
+    background-color: white;
+}
+
+.confirm-panel .row {
+    padding-left: 15px;
+    padding-right: 15px;
 }

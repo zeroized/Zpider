@@ -13,13 +13,18 @@ var configs = {
     }
 };
 
+function changeProtocol(protocol) {
+    $("#protocol").text(protocol);
+}
+
 function loadPage(url) {
     if (url) {
         var st = url.lastIndexOf("//");
         url = url.substring(st + 2);
         $("#url").val(url);
     }
-    url = "http://localhost:8080/load?url=http://" + $("#url").val();
+    var protocol = $("#protocol").text();
+    url = "http://localhost:8080/load?url=" + protocol + $("#url").val().replace(/&/g, '%26');
     $("#target_page").attr("src", url);
     // if (window.event) window.event.preventDefault();
     $("#loading").removeClass("hidden");
@@ -118,18 +123,21 @@ function testDom() {
     // console.log(JSON.stringify(ele));
     var length = ele.length;
     var type = $("#column-input-type").val();
+    $("#test-dom-select>li").remove();
     if (length === 0) {
-        $("#test-select").val("未找到对应内容，可能是动态加载的节点")
+        $("#test-dom-select").append("<li>未找到对应内容，可能是动态加载的节点</li>")
     } else {
-        var result = "";
+        // var result = "";
         for (var i = 0; i < length; i++) {
             if (type === 'text') {
-                result += " " + $(ele[i]).text();
+                // result += " " + $(ele[i]).text();
+                $("#test-dom-select").append("<li>" + $(ele[i]).text() + "</li>")
             } else if (type === 'html') {
-                result += " " + $(ele[i]).html();
+                // result += " " + $(ele[i]).html();
             }
+
         }
-        $("#test-select").val(result);
+        // $("#test-select").val(result);
         $("#test-select-length").text("共" + length + "个结果");
     }
 }
@@ -220,6 +228,49 @@ function addColumn() {
         configs.crawl.id++;
     }
     return false;
+}
+
+function loadConfirm() {
+    $("#seed-confirm>li").remove();
+    var key, seeds = configs.seed;
+    for (key in seeds) {
+        if (seeds.hasOwnProperty(key)) {
+            if (key !== 'id') {
+                $("#seed-confirm").append("<li class='list-group-item'>" + key + "</li>");
+            }
+        }
+    }
+    $("#domain-confirm>li").remove();
+    var domains = configs.domain;
+    for (key in domains) {
+        if (domains.hasOwnProperty(key)) {
+            if (key !== 'id') {
+                $("#domain-confirm").append("<li class='list-group-item'>" + key + "</li>");
+            }
+        }
+    }
+    $("#crawl-confirm>li").remove();
+    var crawls = configs.crawl;
+    for (key in crawls) {
+        if (crawls.hasOwnProperty(key)) {
+            if (key !== 'id') {
+                $("#crawl-confirm").append("<li class='list-group-item'>" + key + "</li>");
+            }
+        }
+    }
+    $("#column-confirm>tr").remove();
+    var columns = configs.column;
+    for (key in columns) {
+        if (columns.hasOwnProperty(key)) {
+            if (key !== 'id') {
+                $("#column-confirm").append("<tr>" +
+                    "<td>" + key + "</td>" +
+                    "<td>" + columns[key].type + "</td>" +
+                    "<td>" + columns[key].dom + "</td>" +
+                    "</tr>");
+            }
+        }
+    }
 }
 
 function startCrawler(e) {
