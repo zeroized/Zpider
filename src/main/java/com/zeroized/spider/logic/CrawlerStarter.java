@@ -5,7 +5,7 @@ import com.zeroized.spider.crawler.CrawlControllerOptions;
 import com.zeroized.spider.crawler.CrawlerFactory;
 import com.zeroized.spider.crawler.CrawlerOptions;
 import com.zeroized.spider.domain.Column;
-import com.zeroized.spider.domain.CrawlAdvancedOption;
+import com.zeroized.spider.domain.CrawlAdvConfig;
 import com.zeroized.spider.logic.pool.CrawlerPool;
 import com.zeroized.spider.logic.rx.CrawlerObservable;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -33,7 +33,7 @@ public class CrawlerStarter {
     }
 
     public int start(String name, List<String> seeds, List<String> allowDomains, List<String> crawlUrlPrefixes,
-                     List<Column> columns, CrawlAdvancedOption advancedOption) throws Exception {
+                     List<Column> columns, CrawlAdvConfig advancedOption) throws Exception {
         CrawlControllerOptions options = crawlControllerFactory.createOption();
         options.setWorkers(advancedOption.getWorkers());
         options.setDelay(advancedOption.getPoliteWait());

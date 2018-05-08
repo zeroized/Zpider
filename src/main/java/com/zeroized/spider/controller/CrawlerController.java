@@ -1,13 +1,13 @@
 package com.zeroized.spider.controller;
 
 import com.zeroized.spider.domain.Column;
-import com.zeroized.spider.domain.CrawlRequest;
+import com.zeroized.spider.domain.CrawlAdvConfig;
+import com.zeroized.spider.domain.CrawlConfig;
 import com.zeroized.spider.logic.CrawlerStarter;
+import com.zeroized.spider.logic.module.CrawlerPoolService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,31 +17,166 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/crawl")
+@SessionAttributes("crawlerConfig")
 public class CrawlerController {
+
     private final CrawlerStarter crawlerStarter;
 
+    private final CrawlerPoolService crawlerPoolService;
+
     @Autowired
-    public CrawlerController(CrawlerStarter crawlerStarter) {
+    public CrawlerController(CrawlerStarter crawlerStarter, CrawlerPoolService crawlerPoolService) {
         this.crawlerStarter = crawlerStarter;
+        this.crawlerPoolService = crawlerPoolService;
+    }
+
+    @PostMapping("/config/basic/{field}/{operate}")
+    public MessageBean configBasic(@PathVariable("field") String field, @PathVariable("operate") String operate,
+                                   @RequestParam String value,
+                                   @ModelAttribute("crawlerConfig") CrawlConfig crawlConfig) {
+        MessageBean messageBean;
+        List<String> configList;
+        switch (field) {
+            case "name":
+                crawlConfig.setName(value);
+                messageBean = MessageBean.successBean();
+                messageBean.getMessage().put("data", value);
+                return messageBean;
+            case "seed":
+                configList = crawlConfig.getSeeds();
+                break;
+            case "domain":
+                configList = crawlConfig.getAllowDomains();
+                break;
+            case "crawl":
+                configList = crawlConfig.getCrawlUrlPrefixes();
+                break;
+            default:
+                messageBean = MessageBean.errorBean();
+                messageBean.getMessage().put("error", "config field is invalid");
+                return messageBean;
+        }
+        switch (operate) {
+            case "add":
+                if (configList.contains(value)) {
+                    messageBean = MessageBean.errorBean();
+                    messageBean.getMessage().put("error", "seed exists");
+                } else {
+                    configList.add(value);
+                    messageBean = MessageBean.successBean();
+                }
+                break;
+            case "delete":
+                if (!configList.contains(value)) {
+                    messageBean = MessageBean.errorBean();
+                    messageBean.getMessage().put("error", "seed does not exist");
+                } else {
+                    configList.remove(value);
+                    messageBean = MessageBean.successBean();
+                }
+                break;
+            default:
+                messageBean = MessageBean.errorBean();
+                messageBean.getMessage().put("error", "operate is invalid");
+                return messageBean;
+        }
+
+        messageBean.getMessage().put("data", configList);
+        return messageBean;
+    }
+
+    @PostMapping("/config/basic/column/{operate}")
+    public MessageBean configBasic(@PathVariable("operate") String operate,
+                                   @RequestParam String value, @RequestParam(required = false) String rule,
+                                   @RequestParam(required = false) String type,
+                                   @ModelAttribute("crawlerConfig") CrawlConfig crawlConfig) {
+        MessageBean messageBean;
+        List<Column> columns = crawlConfig.getColumns();
+        switch (operate) {
+            case "add":
+                for (Column column : columns) {
+                    if (column.getColumn().equals(value)) {
+                        messageBean = MessageBean.errorBean();
+                        messageBean.getMessage().put("error", "column exists");
+                        return messageBean;
+                    }
+                }
+                Column column = new Column(value, rule, type);
+                columns.add(column);
+                messageBean = MessageBean.successBean();
+                messageBean.getMessage().put("data", columns);
+                break;
+            case "delete":
+                for (Column column1 : columns) {
+                    if (column1.getColumn().equals(value)) {
+                        columns.remove(column1);
+                        messageBean = MessageBean.successBean();
+                        messageBean.getMessage().put("data", columns);
+                        return messageBean;
+                    }
+                }
+                messageBean = MessageBean.errorBean();
+                messageBean.getMessage().put("error", "column does not exist");
+                break;
+            default:
+                messageBean = MessageBean.errorBean();
+                messageBean.getMessage().put("error", "operate invalid");
+        }
+        return messageBean;
+    }
+
+    @PostMapping("/config/adv/{field}")
+    public MessageBean configAdv(@PathVariable("field") String field, @RequestParam int value,
+                                 @ModelAttribute("crawlerConfig") CrawlConfig crawlConfig) {
+        MessageBean messageBean;
+        CrawlAdvConfig crawlAdvConfig = crawlConfig.getAdvancedOpt();
+        switch (field) {
+            case "worker":
+                crawlAdvConfig.setWorkers(value);
+                break;
+            case "maxDepth":
+                crawlAdvConfig.setMaxDepth(value);
+                break;
+            case "maxPage":
+                crawlAdvConfig.setMaxPage(value);
+                break;
+            case "politeWait":
+                crawlAdvConfig.setPoliteWait(value);
+                break;
+            default:
+                messageBean = MessageBean.errorBean();
+                messageBean.getMessage().put("error", "config field is invalid");
+                return messageBean;
+        }
+        messageBean = MessageBean.successBean();
+        messageBean.getMessage().put("data", crawlAdvConfig);
+        return messageBean;
+    }
+
+    @GetMapping("/config/confirm")
+    public MessageBean confirm(@ModelAttribute("crawlerConfig") CrawlConfig crawlConfig) {
+        MessageBean messageBean = MessageBean.successBean();
+        messageBean.getMessage().put("data", crawlConfig);
+        return messageBean;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/start")
-    public String setup(@RequestBody CrawlRequest crawlRequest) throws Exception {
+    public String setup(@RequestBody CrawlConfig crawlConfig) throws Exception {
 //        System.out.println("/crawl/start visited");
-        List<String> seeds = crawlRequest.getSeeds();
-        List<String> allowDomains = crawlRequest.getAllowDomains()
+        List<String> seeds = crawlConfig.getSeeds();
+        List<String> allowDomains = crawlConfig.getAllowDomains()
                 .stream()
                 .map(x -> x.startsWith("http://") ? x : "http://" + x)
                 .collect(Collectors.toList());
-        List<String> crawlUrlPrefixes = crawlRequest.getCrawlUrlPrefixes()
+        List<String> crawlUrlPrefixes = crawlConfig.getCrawlUrlPrefixes()
                 .stream()
                 .map(x -> x.startsWith("http://") ? x : "http://" + x)
                 .collect(Collectors.toList());
 
-        List<Column> columns = crawlRequest.getColumns();
+        List<Column> columns = crawlConfig.getColumns();
 
-        crawlerStarter.start(crawlRequest.getName(), seeds, allowDomains,
-                crawlUrlPrefixes, columns, crawlRequest.getAdvancedOpt());
+        crawlerStarter.start(crawlConfig.getName(), seeds, allowDomains,
+                crawlUrlPrefixes, columns, crawlConfig.getAdvancedOpt());
 //        CrawlControllerOptions options = CrawlControllerOptions.defaultOptions();
 //        options.setWorkers(crawlRequest.getAdvancedOpt().getWorkers());
 //        options.setDelay(crawlRequest.getAdvancedOpt().getPoliteWait());
@@ -67,5 +202,15 @@ public class CrawlerController {
 //        }
 //        crawlController.startNonBlocking(crawlerFactory, options.getWorkers());
         return "";
+    }
+
+    @GetMapping("/create")
+    public MessageBean create(@ModelAttribute("crawlerConfig") CrawlConfig crawlConfig,
+                              ModelMap modelMap) {
+        crawlerPoolService.register(crawlConfig);
+
+        MessageBean messageBean = MessageBean.successBean();
+        modelMap.remove("crawlerConfig");
+        return messageBean;
     }
 }

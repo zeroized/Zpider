@@ -173,6 +173,12 @@ function removeTableRow(tableId, id) {
     var tdValue = $("#" + tableId + "-" + id + ">td:first").text();
     $("#" + tableId + "-" + id).remove();
     delete configs[tableId][tdValue];
+    var url = "/crawl/config/basic/" + tableId + "/delete";
+    $.post(url, {
+        value: tdValue
+    }, function (data) {
+        alert(JSON.stringify(data));
+    })
 }
 
 function addSeed() {
@@ -186,6 +192,11 @@ function addSeed() {
         configs.seed[seed] = "";
         configs.seed.id++;
     }
+    $.post("/crawl/config/basic/seed/add", {
+        value: seed
+    }, function (data) {
+        alert(JSON.stringify(data));
+    });
 }
 
 function addDomain() {
@@ -198,6 +209,11 @@ function addDomain() {
         configs.domain[domain] = "";
         configs.domain.id++;
     }
+    $.post("/crawl/config/basic/domain/add", {
+        value: domain
+    }, function (data) {
+        alert(JSON.stringify(data));
+    });
 }
 
 function addCrawl() {
@@ -210,6 +226,11 @@ function addCrawl() {
         configs.crawl[crawl] = "";
         configs.crawl.id++;
     }
+    $.post("/crawl/config/basic/crawl/add", {
+        value: crawl
+    }, function (data) {
+        alert(JSON.stringify(data));
+    });
 }
 
 function addColumn() {
@@ -227,7 +248,23 @@ function addColumn() {
         };
         configs.crawl.id++;
     }
+    $.post("/crawl/config/basic/column/add", {
+        value: name,
+        rule: dom,
+        type: type
+    }, function (data) {
+        alert(JSON.stringify(data));
+    });
     return false;
+}
+
+function saveName() {
+    var name = $("#spider-name").val();
+    $.post("/crawl/config/basic/name/revise", {
+        value: name
+    }, function (data) {
+        alert(JSON.stringify(data));
+    });
 }
 
 function loadConfirm() {

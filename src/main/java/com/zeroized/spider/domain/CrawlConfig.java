@@ -1,19 +1,25 @@
 package com.zeroized.spider.domain;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Zero on 2018/3/28.
  */
-public class CrawlRequest {
+public class CrawlConfig {
     private List<String> seeds;
     private List<String> allowDomains;
     private List<String> crawlUrlPrefixes;
     private List<Column> columns;
-    private CrawlAdvancedOption advancedOpt;
+    private CrawlAdvConfig advancedOpt;
     private String name;
 
-    public CrawlRequest() {
+    public CrawlConfig() {
+        seeds = new LinkedList<>();
+        allowDomains = new LinkedList<>();
+        crawlUrlPrefixes = new LinkedList<>();
+        columns = new LinkedList<>();
+        advancedOpt = new CrawlAdvConfig();
     }
 
     public List<String> getSeeds() {
@@ -24,12 +30,20 @@ public class CrawlRequest {
         this.seeds = seeds;
     }
 
+    public void addSeed(String seed) {
+        this.seeds.add(seed);
+    }
+
     public List<String> getAllowDomains() {
         return allowDomains;
     }
 
     public void setAllowDomains(List<String> allowDomains) {
         this.allowDomains = allowDomains;
+    }
+
+    public void addAllowDomain(String allowDomain) {
+        this.allowDomains.add(allowDomain);
     }
 
     public List<String> getCrawlUrlPrefixes() {
@@ -40,6 +54,10 @@ public class CrawlRequest {
         this.crawlUrlPrefixes = crawlUrlPrefixes;
     }
 
+    public void addCrawlUrlPrefix(String crawlUrlPrefix) {
+        this.crawlUrlPrefixes.add(crawlUrlPrefix);
+    }
+
     public List<Column> getColumns() {
         return columns;
     }
@@ -48,11 +66,15 @@ public class CrawlRequest {
         this.columns = columns;
     }
 
-    public CrawlAdvancedOption getAdvancedOpt() {
+    public void addColumn(Column column) {
+        this.columns.add(column);
+    }
+
+    public CrawlAdvConfig getAdvancedOpt() {
         return advancedOpt;
     }
 
-    public void setAdvancedOpt(CrawlAdvancedOption advancedOpt) {
+    public void setAdvancedOpt(CrawlAdvConfig advancedOpt) {
         this.advancedOpt = advancedOpt;
     }
 

@@ -17,6 +17,7 @@ import java.util.Map;
 public class CrawlerPool {
     private final CrawlerPoolConfig crawlerPoolConfig;
     private Map<String, CrawlerInfo> pool;
+    private Map<String, CrawlerInfo> finishedCrawler;
     private volatile int currentCrawler = 0;
 
     @Autowired

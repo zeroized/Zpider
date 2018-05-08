@@ -8,13 +8,18 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="col-sm-2 col-sm-offset-10">
+                    <button class="btn btn-primary btn-block" onclick="saveName()">保存</button>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-md-3 control-label" for="seed">种子地址</label>
                 <div class="col-md-9">
                     <div class="input-group">
                         <input type="text" class="form-control" name="seed" id="seed-input" placeholder="输入地址" required>
                         <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" onclick="addSeed()">添加</button>
-                                    </span>
+                            <button type="button" class="btn btn-default" onclick="addSeed()">添加</button>
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-9 col-md-offset-3">
@@ -27,8 +32,8 @@
                     <div class="input-group">
                         <input type="text" class="form-control" id="domain-input">
                         <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" onclick="addDomain()">添加</button>
-                                    </span>
+                            <button type="button" class="btn btn-default" onclick="addDomain()">添加</button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -38,14 +43,9 @@
                     <div class="input-group">
                         <input type="text" class="form-control" id="crawl-input">
                         <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" onclick="addCrawl()">添加</button>
-                                    </span>
+                            <button type="button" class="btn btn-default" onclick="addCrawl()">添加</button>
+                        </span>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-2 col-sm-offset-10">
-                    <button class="btn btn-primary btn-block">保存</button>
                 </div>
             </div>
         </form>

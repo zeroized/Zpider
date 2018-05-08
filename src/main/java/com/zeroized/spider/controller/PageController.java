@@ -1,12 +1,15 @@
 package com.zeroized.spider.controller;
 
+import com.zeroized.spider.domain.CrawlConfig;
 import com.zeroized.spider.logic.module.DomParseService;
 import com.zeroized.spider.util.HttpRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/")
+@SessionAttributes("crawlerConfig")
 public class PageController {
     private final DomParseService domParseService;
 
@@ -30,7 +34,10 @@ public class PageController {
     }
 
     @RequestMapping("/create")
-    public ModelAndView create() {
+    public ModelAndView create(ModelMap modelMap) {
+        if (!modelMap.containsAttribute("crawlerConfig")) {
+            modelMap.addAttribute("crawlerConfig", new CrawlConfig());
+        }
         return new ModelAndView("create");
     }
 
