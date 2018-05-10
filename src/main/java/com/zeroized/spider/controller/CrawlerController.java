@@ -8,6 +8,7 @@ import com.zeroized.spider.logic.module.CrawlerPoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -125,29 +126,16 @@ public class CrawlerController {
         return messageBean;
     }
 
-    @PostMapping("/config/adv/{field}")
-    public MessageBean configAdv(@PathVariable("field") String field, @RequestParam int value,
+    @PostMapping("/config/adv")
+    public MessageBean configAdv(@RequestParam int workers, @RequestParam int maxDepth,
+                                 @RequestParam int maxPage, @RequestParam int politeWait,
                                  @ModelAttribute("crawlerConfig") CrawlConfig crawlConfig) {
         MessageBean messageBean;
         CrawlAdvConfig crawlAdvConfig = crawlConfig.getAdvancedOpt();
-        switch (field) {
-            case "worker":
-                crawlAdvConfig.setWorkers(value);
-                break;
-            case "maxDepth":
-                crawlAdvConfig.setMaxDepth(value);
-                break;
-            case "maxPage":
-                crawlAdvConfig.setMaxPage(value);
-                break;
-            case "politeWait":
-                crawlAdvConfig.setPoliteWait(value);
-                break;
-            default:
-                messageBean = MessageBean.errorBean();
-                messageBean.getMessage().put("error", "config field is invalid");
-                return messageBean;
-        }
+        crawlAdvConfig.setWorkers(workers);
+        crawlAdvConfig.setMaxDepth(maxDepth);
+        crawlAdvConfig.setMaxPage(maxPage);
+        crawlAdvConfig.setPoliteWait(politeWait);
         messageBean = MessageBean.successBean();
         messageBean.getMessage().put("data", crawlAdvConfig);
         return messageBean;
@@ -206,11 +194,12 @@ public class CrawlerController {
 
     @GetMapping("/create")
     public MessageBean create(@ModelAttribute("crawlerConfig") CrawlConfig crawlConfig,
-                              ModelMap modelMap) {
+                              ModelMap modelMap, SessionStatus sessionStatus) throws Exception {
         crawlerPoolService.register(crawlConfig);
 
         MessageBean messageBean = MessageBean.successBean();
         modelMap.remove("crawlerConfig");
+//        sessionStatus.setComplete();
         return messageBean;
     }
 }

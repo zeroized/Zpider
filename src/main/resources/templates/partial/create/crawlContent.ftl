@@ -58,7 +58,7 @@
     </div>
 </div>
 <div class="col-sm-3" style="height: 100%;" id="content-slider">
-    <div class="panel panel-default slider-right">
+    <div class="panel panel-default sidebar-right">
         <ul class="nav nav-pills nav-justified">
             <li class="active">
                 <a href="#column-tool-tab"
@@ -68,10 +68,10 @@
                 <a href="#column-show-tab"
                    aria-controls="column-tool-tab" role="tab" data-toggle="tab">字段</a>
             </li>
-            <li><a onclick="collapseRightSlider()">隐藏</a></li>
+            <li><a onclick="collapseRightSidebar()">隐藏</a></li>
         </ul>
         <div class="panel-body">
-            <div class="tab-content slider-right-content">
+            <div class="tab-content sidebar-right-content">
                 <div role="tabpanel" class="tab-pane active" id="column-tool-tab">
                     <form id="add-rule" onsubmit="return addColumn()">
                         <div class="form-group">
@@ -115,7 +115,7 @@
     </div>
 </div>
 <div class="col-sm-1" id="slider-right-collapsed" style="display: none;">
-    <ul class="nav nav-tabs nav-justified slider-right-show">
-        <li><a href="#column-show-tab" onclick="collapseRightSlider()">显示</a></li>
+    <ul class="nav nav-tabs nav-justified sidebar-right-show">
+        <li><a href="#column-show-tab" onclick="collapseRightSidebar()">显示</a></li>
     </ul>
 </div>

@@ -14,22 +14,22 @@
 </head>
 <body>
 <#include 'partial/nav.ftl'>
-<div class="col-sm-2 slider slider-left" id="left">
-    <#include 'partial/leftSlider.ftl'>
+<div class="col-sm-2 sidebar sidebar-left" id="left">
+    <#include 'partial/create/leftSidebar.ftl'>
 </div>
 <div class="col-sm-10 content" id="content">
     <div class="tab-content row">
         <div role="tabpanel" class="tab-pane active" id="basic-tab">
-            <#include 'partial/basicConfig.ftl'>
+            <#include 'partial/create/basicConfig.ftl'>
         </div>
         <div role="tabpanel" class="tab-pane" id="adv-tab">
-            <#include 'partial/advConfig.ftl'>
+            <#include 'partial/create/advConfig.ftl'>
         </div>
         <div role="tabpanel" class="tab-pane" id="content-tab">
-            <#include 'partial/crawlContent.ftl'>
+            <#include 'partial/create/crawlContent.ftl'>
         </div>
         <div role="tabpanel" class="tab-pane confirm-panel" id="confirm-tab">
-            <#include 'partial/createConfirm.ftl'>
+            <#include 'partial/create/createConfirm.ftl'>
         </div>
     </div>
 </div>

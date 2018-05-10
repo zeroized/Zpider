@@ -1,9 +1,9 @@
-<div class="col-md-7">
+<div class="col-sm-7">
     <div class="panel panel-default basic-panel">
         <form class="form-horizontal">
             <div class="form-group">
-                <label class="col-md-3 control-label" for="spider-name">爬虫名称</label>
-                <div class="col-md-9">
+                <label class="col-sm-3 control-label" for="spider-name">爬虫名称</label>
+                <div class="col-sm-9">
                     <input type="text" class="form-control" name="spider-name" id="spider-name">
                 </div>
             </div>
@@ -13,8 +13,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label" for="seed">种子地址</label>
-                <div class="col-md-9">
+                <label class="col-sm-3 control-label" for="seed">种子地址</label>
+                <div class="col-sm-9">
                     <div class="input-group">
                         <input type="text" class="form-control" name="seed" id="seed-input" placeholder="输入地址" required>
                         <span class="input-group-btn">
@@ -22,13 +22,13 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-md-9 col-md-offset-3">
+                <div class="col-sm-9 col-sm-offset-3">
                     <span class="help-block">将从以上地址开始爬取网页</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label" for="domain-input">允许访问的域名</label>
-                <div class="col-md-9">
+                <label class="col-sm-3 control-label" for="domain-input">允许访问的域名</label>
+                <div class="col-sm-9">
                     <div class="input-group">
                         <input type="text" class="form-control" id="domain-input">
                         <span class="input-group-btn">
@@ -38,8 +38,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label" for="crawl-input">爬取地址前缀</label>
-                <div class="col-md-9">
+                <label class="col-sm-3 control-label" for="crawl-input">爬取地址前缀</label>
+                <div class="col-sm-9">
                     <div class="input-group">
                         <input type="text" class="form-control" id="crawl-input">
                         <span class="input-group-btn">
@@ -51,8 +51,8 @@
         </form>
     </div>
 </div>
-<div class="col-md-5" style="height: 100%;">
-    <div class="panel panel-default slider-right">
+<div class="col-sm-5" style="height: 100%;">
+    <div class="panel panel-default sidebar-right">
         <ul class="nav nav-pills nav-justified">
             <li class="active">
                 <a href="#seed-show-tab"
@@ -68,7 +68,7 @@
             </li>
         </ul>
         <div class="panel-body">
-            <div class="tab-content slider-right-content">
+            <div class="tab-content sidebar-right-content">
                 <div role="tabpanel" class="tab-pane active" id="seed-show-tab">
                     <table class="table">
                         <thead>

@@ -58,19 +58,19 @@
                 <tbody>
                 <tr>
                     <td>爬虫工人数</td>
-                    <td>1</td>
+                    <td id="confirm-adv-workers">1</td>
                 </tr>
                 <tr>
                     <td>最大爬取深度</td>
-                    <td>20</td>
+                    <td id="confirm-adv-max-depth">20</td>
                 </tr>
                 <tr>
                     <td>最大访问页面数</td>
-                    <td>10000</td>
+                    <td id="confirm-adv-max-page">10000</td>
                 </tr>
                 <tr>
                     <td>等待时间</td>
-                    <td>1000ms</td>
+                    <td id="confirm-adv-polite-wait">1000ms</td>
                 </tr>
                 </tbody>
             </table>
@@ -79,6 +79,6 @@
 </div>
 <div class="row">
     <div class="col-sm-2 col-sm-offset-10">
-        <button class="btn btn-primary btn-block" onclick="startCrawler(event)">创建爬虫</button>
+        <button class="btn btn-primary btn-block" onclick="createCrawler()">创建爬虫</button>
     </div>
 </div>

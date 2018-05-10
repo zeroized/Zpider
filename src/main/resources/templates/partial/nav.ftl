@@ -6,7 +6,7 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a href="/create">新建爬虫</a></li>
-            <li><a href="#">查看爬虫</a></li>
+            <li><a href="/list">查看爬虫</a></li>
         </ul>
         <p class="navbar-text navbar-right version-label">version 0.3.0</p>
     </div><!-- /.container-fluid -->

@@ -39,7 +39,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-2 col-sm-offset-10">
-                    <button class="btn btn-primary btn-block">保存</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="saveAdvOpt()">保存</button>
                 </div>
             </div>
         </form>

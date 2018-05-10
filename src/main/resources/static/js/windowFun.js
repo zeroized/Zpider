@@ -267,47 +267,90 @@ function saveName() {
     });
 }
 
+function saveAdvOpt(){
+    $.post("/crawl/config/adv",{
+        workers: $("#adv-workers").val(),
+        maxDepth: $("#adv-max-depth").val(),
+        maxPage: $("#adv-max-page").val(),
+        politeWait: $("#adv-polite-wait").val()
+    },function(data){
+        alert(JSON.stringify(data));
+    })
+}
+
 function loadConfirm() {
-    $("#seed-confirm>li").remove();
-    var key, seeds = configs.seed;
-    for (key in seeds) {
-        if (seeds.hasOwnProperty(key)) {
-            if (key !== 'id') {
-                $("#seed-confirm").append("<li class='list-group-item'>" + key + "</li>");
-            }
-        }
-    }
-    $("#domain-confirm>li").remove();
-    var domains = configs.domain;
-    for (key in domains) {
-        if (domains.hasOwnProperty(key)) {
-            if (key !== 'id') {
-                $("#domain-confirm").append("<li class='list-group-item'>" + key + "</li>");
-            }
-        }
-    }
-    $("#crawl-confirm>li").remove();
-    var crawls = configs.crawl;
-    for (key in crawls) {
-        if (crawls.hasOwnProperty(key)) {
-            if (key !== 'id') {
-                $("#crawl-confirm").append("<li class='list-group-item'>" + key + "</li>");
-            }
-        }
-    }
-    $("#column-confirm>tr").remove();
-    var columns = configs.column;
-    for (key in columns) {
-        if (columns.hasOwnProperty(key)) {
-            if (key !== 'id') {
-                $("#column-confirm").append("<tr>" +
-                    "<td>" + key + "</td>" +
-                    "<td>" + columns[key].type + "</td>" +
-                    "<td>" + columns[key].dom + "</td>" +
-                    "</tr>");
-            }
-        }
-    }
+    // $("#seed-confirm>li").remove();
+    // var key, seeds = configs.seed;
+    // for (key in seeds) {
+    //     if (seeds.hasOwnProperty(key)) {
+    //         if (key !== 'id') {
+    //             $("#seed-confirm").append("<li class='list-group-item'>" + key + "</li>");
+    //         }
+    //     }
+    // }
+    // $("#domain-confirm>li").remove();
+    // var domains = configs.domain;
+    // for (key in domains) {
+    //     if (domains.hasOwnProperty(key)) {
+    //         if (key !== 'id') {
+    //             $("#domain-confirm").append("<li class='list-group-item'>" + key + "</li>");
+    //         }
+    //     }
+    // }
+    // $("#crawl-confirm>li").remove();
+    // var crawls = configs.crawl;
+    // for (key in crawls) {
+    //     if (crawls.hasOwnProperty(key)) {
+    //         if (key !== 'id') {
+    //             $("#crawl-confirm").append("<li class='list-group-item'>" + key + "</li>");
+    //         }
+    //     }
+    // }
+    // $("#column-confirm>tr").remove();
+    // var columns = configs.column;
+    // for (key in columns) {
+    //     if (columns.hasOwnProperty(key)) {
+    //         if (key !== 'id') {
+    //             $("#column-confirm").append("<tr>" +
+    //                 "<td>" + key + "</td>" +
+    //                 "<td>" + columns[key].type + "</td>" +
+    //                 "<td>" + columns[key].dom + "</td>" +
+    //                 "</tr>");
+    //         }
+    //     }
+    // }
+    $.get("/crawl/config/confirm",function(data){
+        $("#seed-confirm>li").remove();
+        var seeds=data.message.data.seeds;
+        seeds.forEach(function(e){
+            $("#seed-confirm").append("<li class='list-group-item'>" + e + "</li>");
+        });
+        $("#domain-confirm>li").remove();
+        var domains=data.message.data.allowDomains;
+        domains.forEach(function(e){
+            $("#domain-confirm").append("<li class='list-group-item'>" + e + "</li>");
+        });
+        $("#crawl-confirm>li").remove();
+        var crawls=data.message.data.crawlUrlPrefixes;
+        crawls.forEach(function(e){
+            $("#crawl-confirm").append("<li class='list-group-item'>" + e + "</li>");
+        });
+        $("#column-confirm>tr").remove();
+        var columns=data.message.data.columns;
+        columns.forEach(function(e){
+            $("#column-confirm").append("<tr>" +
+                "<td>" + e.column + "</td>" +
+                "<td>" + e.type + "</td>" +
+                "<td>" + e.rule + "</td>" +
+                "</tr>");
+        });
+        var advopt=data.message.data.advancedOpt;
+        $("#confirm-adv-workers").text(advopt.workers);
+        $("#confirm-adv-max-depth").text(advopt.maxDepth);
+        $("#confirm-adv-max-page").text(advopt.maxPage);
+        $("#confirm-adv-polite-wait").text(advopt.politeWait);
+        var name=data.message.data.name;
+    })
 }
 
 function startCrawler(e) {
@@ -387,4 +430,12 @@ function startCrawler(e) {
         }
     });
     return false;
+}
+
+function createCrawler(){
+    $.get("/crawl/create",function(data){
+        if (data.status === 1) {
+            window.location.href="/list";
+        }
+    })
 }

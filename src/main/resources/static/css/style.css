@@ -27,7 +27,7 @@ textarea {
     padding-right: 20px;
 }
 
-.slider {
+.sidebar {
     background-color: #333744;
     height: calc(100% - 51px);
     /*width: calc(25% - 2px);*/
@@ -35,31 +35,31 @@ textarea {
     padding-right: 0;
 }
 
-.slider-content {
+.sidebar-content {
     width: 100%;
 }
 
-.slider .btn-create {
+.sidebar .btn-create {
     margin-top: 20px;
     background-color: #00bbbb !important;
 }
 
-.slider .btn {
+.sidebar .btn {
     background-color: #42485b;
     color: white;
     border: none;
 }
 
-.slider .slider-content .btn {
+.sidebar .sidebar-content .btn {
     text-align: left;
     padding-left: 18px;
 }
 
-.slider .slider-content .slider-label {
+.sidebar .sidebar-content .sidebar-label {
     margin-left: 10px;
 }
 
-.slider .slider-content > ul > li > a:hover {
+.sidebar .sidebar-content > ul > li > a:hover {
     background-color: #00bbbb !important;
 }
 
@@ -68,7 +68,7 @@ textarea {
     background-color: #4a5064 !important;
 }
 
-.slider-collapse {
+.sidebar-collapse {
     width: 50px;
     float: left;
 }
@@ -149,7 +149,7 @@ textarea {
     height: 100%;
 }
 
-.slider-right {
+.sidebar-right {
     border: none;
     border-radius: 0;
     margin-top: 20px;
@@ -159,20 +159,20 @@ textarea {
     /*height: calc(100% - 20px);*/
 }
 
-.slider-right > ul > li > a {
+.sidebar-right > ul > li > a {
     border-radius: 0 !important;
 }
 
-.slider-right .list-unstyled {
+.sidebar-right .list-unstyled {
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-.slider-right .slider-right-content {
+.sidebar-right .sidebar-right-content {
     padding: 10px;
 }
 
-.slider-right-show {
+.sidebar-right-show {
     margin-top: 20px;
     background-color: white;
 }

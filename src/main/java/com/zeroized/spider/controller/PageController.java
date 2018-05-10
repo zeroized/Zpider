@@ -41,6 +41,11 @@ public class PageController {
         return new ModelAndView("create");
     }
 
+    @RequestMapping("/list")
+    public ModelAndView list(){
+        return new ModelAndView("list");
+    }
+
     @RequestMapping("/load")
     public @ResponseBody
     String load(@RequestParam String url) throws IOException {

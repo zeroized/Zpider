@@ -22,7 +22,7 @@
         <p class="navbar-text navbar-right">version 0.0.1</p>
     </div><!-- /.container-fluid -->
 </nav>
-<div class="col-md-3 slider" id="left">
+<div class="col-md-3 sidebar" id="left">
     <a style="float: right;margin-top: 20px;color: #cc450c" href="javascript:void " onclick="myClick(0);"><<</a>
     <h3>新建爬虫</h3>
     <form>
@@ -233,7 +233,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-3 slider" id="right">
+<div class="col-md-3 sidebar" id="right">
     <a style="float: right;margin-top: 20px;color: #cc450c" href="javascript:void " onclick="myClick(3);">>></a>
     <h5>节点信息</h5>
     <form>
