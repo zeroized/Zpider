@@ -27,36 +27,35 @@ function loadPage(url) {
     url = "http://localhost:8080/load?url=" + protocol + $("#url").val().replace(/&/g, '%26');
     $("#target_page").attr("src", url);
     // if (window.event) window.event.preventDefault();
-    $("#loading").removeClass("hidden");
-    $("#view-allow").addClass("hidden");
-    $("#view-forbid").addClass("hidden");
+    $("#loading").show();
+    $("#view-allow").hide();
+    $("#view-forbid").hide();
     return false;
 }
 
 function finishLoading() {
-    $("#loading").addClass("hidden");
-    $("#view-allow").removeClass("hidden");
+    $("#loading").hide();
+    $("#view-allow").show();
 }
 
 function refresh() {
     var frame = $("#target_page");
     frame.attr("src", frame.attr("src"));
-    $("#loading").removeClass("hidden");
-    $("#view-allow").addClass("hidden");
-    $("#view-forbid").addClass("hidden");
-    $("form").reset();
+    $("#loading").show();
+    $("#view-allow").hide();
+    $("#view-forbid").hide();
 }
 
 function turn(bool) {
     document.getElementById("target_page").contentWindow.turn(bool);
     if (document.getElementById("target_page").contentWindow.showSwitch) {
-        $("#view-allow").addClass("hidden");
-        $("#loading").addClass("hidden");
-        $("#view-forbid").removeClass("hidden");
+        $("#view-allow").hide();
+        $("#loading").hide();
+        $("#view-forbid").show();
     } else {
-        $("#view-forbid").addClass("hidden");
-        $("#loading").addClass("hidden");
-        $("#view-allow").removeClass("hidden");
+        $("#view-forbid").hide();
+        $("#loading").hide();
+        $("#view-allow").show();
     }
 }
 
@@ -334,7 +333,7 @@ function setBasicConfigPanel(ele_id,array){
     var ele=$(ele_id+">div>ul");
     if (array.length !== 0) {
         panel_ele.show();
-        $(ele+">div>ul>li").remove();
+        $(ele_id+">div>ul>li").remove();
         array.forEach(function(e){
             ele.append("<li class='list-group-item'>" + e + "</li>");
         });

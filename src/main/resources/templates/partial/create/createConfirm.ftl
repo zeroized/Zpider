@@ -3,7 +3,7 @@
         <button class="btn btn-primary btn-block" onclick="createCrawler()">创建爬虫</button>
     </div>
     <div class="col-sm-2">
-        <button class="btn btn-danger btn-block"">重新设置</button>
+        <button class="btn btn-danger btn-block">重新设置</button>
     </div>
 </div>
 <div class="row">

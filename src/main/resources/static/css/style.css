@@ -107,7 +107,6 @@ textarea {
     padding: 10px;
 }
 
-
 .basic-panel .panel-heading {
     background-color: white;
 }
@@ -198,6 +197,14 @@ textarea {
     word-break: keep-all;
 }
 
-.create-crawler{
+.create-crawler {
     margin-top: 40px;
+}
+
+.crawler-status-group :hover {
+    cursor: pointer;
+}
+
+.table >tbody>tr>td{
+    vertical-align: middle;
 }

@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CrawlerPoolService {
+    public static final int SUCCESS = 1;
+    public static final int ERROR = 0;
 
     private final CrawlerPool crawlerPool;
 

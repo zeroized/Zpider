@@ -104,7 +104,7 @@ public class CrawlerPool {
     }
 
     private boolean verifyStatusChange(int oldStatus, int operate) {
-        return false;
+        return operate == oldStatus + 1;
     }
 
 }
