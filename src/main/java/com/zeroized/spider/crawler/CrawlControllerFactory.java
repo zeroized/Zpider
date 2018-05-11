@@ -1,8 +1,8 @@
 package com.zeroized.spider.crawler;
 
+import com.zeroized.spider.domain.DistributedPageFetcher;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
-import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +53,7 @@ public class CrawlControllerFactory {
 
 //        AuthInfo info=new FormAuthInfo();
 
-        PageFetcher pageFetcher = new PageFetcher(config);
+        DistributedPageFetcher pageFetcher = new DistributedPageFetcher(config);
 
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
 
