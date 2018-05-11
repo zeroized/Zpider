@@ -1,55 +1,44 @@
-<div class="row">
-    <div class="col-sm-4">
-        <div class="panel panel-default basic-panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">种子地址</h3>
-            </div>
-            <ul class="list-group" id="seed-confirm">
-
-            </ul>
-        </div>
+<div class="row" style="margin-top: 15px">
+    <div class="col-sm-offset-8 col-sm-2">
+        <button class="btn btn-primary btn-block" onclick="createCrawler()">创建爬虫</button>
     </div>
-    <div class="col-sm-4">
-        <div class="panel panel-default basic-panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">允许访问的域名</h3>
-            </div>
-            <ul class="list-group" id="domain-confirm">
-
-            </ul>
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="panel panel-default basic-panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">爬取地址前缀</h3>
-            </div>
-            <ul class="list-group" id="crawl-confirm">
-
-            </ul>
-        </div>
+    <div class="col-sm-2">
+        <button class="btn btn-danger btn-block"">重新设置</button>
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-8">
+    <div class="col-md-6">
         <div class="panel panel-default basic-panel">
             <div class="panel-heading">
-                <h3 class="panel-title">字段</h3>
+                <h3 class="panel-title">基础设置</h3>
             </div>
-            <table class="table">
-                <thead>
+            <table class="table adv-opt-table">
+                <tbody>
                 <tr>
-                    <td style="width: 20%;">字段</td>
-                    <td style="width: 10%;">类型</td>
-                    <td style="width: 70%;">规则</td>
+                    <td>爬虫名称</td>
+                    <td id="confirm-basic-name"></td>
                 </tr>
-                </thead>
-                <tbody id="column-confirm">
+                <tr>
+                    <td>种子地址</td>
+                    <td id="confirm-basic-seed-size"></td>
+                </tr>
+                <tr>
+                    <td>允许访问域名</td>
+                    <td id="confirm-basic-domain-size"></td>
+                </tr>
+                <tr>
+                    <td>爬取地址前缀</td>
+                    <td id="confirm-basic-crawl-size"></td>
+                </tr>
+                <tr>
+                    <td>字段</td>
+                    <td id="confirm-basic-column-size"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <div class="panel panel-default basic-panel">
             <div class="panel-heading">
                 <h3 class="panel-title">高级设置</h3>
@@ -78,7 +67,54 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-2 col-sm-offset-10">
-        <button class="btn btn-primary btn-block" onclick="createCrawler()">创建爬虫</button>
+    <div class="col-sm-4"  id="seed-confirm">
+        <div class="panel panel-default basic-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">种子地址</h3>
+            </div>
+            <ul class="list-group">
+
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-4" id="domain-confirm">
+        <div class="panel panel-default basic-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">允许访问的域名</h3>
+            </div>
+            <ul class="list-group">
+
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-4" id="crawl-confirm">
+        <div class="panel panel-default basic-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">爬取地址前缀</h3>
+            </div>
+            <ul class="list-group">
+
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-8" id="column-confirm">
+        <div class="panel panel-default basic-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">字段</h3>
+            </div>
+            <table class="table" style="table-layout: fixed">
+                <thead>
+                <tr>
+                    <td style="width: 10%;">字段</td>
+                    <td style="width: 10%">类型</td>
+                    <td class="table-column-rule">规则</td>
+                </tr>
+                </thead>
+                <tbody >
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

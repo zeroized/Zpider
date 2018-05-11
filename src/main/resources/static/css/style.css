@@ -107,6 +107,11 @@ textarea {
     padding: 10px;
 }
 
+
+.basic-panel .panel-heading {
+    background-color: white;
+}
+
 .frame-panel {
     height: calc(100% - 40px);
     margin-top: 20px;
@@ -182,11 +187,17 @@ textarea {
     text-align: right;
 }
 
-.confirm-panel .panel-heading {
-    background-color: white;
-}
-
 .confirm-panel .row {
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.table-column-rule {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    word-break: keep-all;
+}
+
+.create-crawler{
+    margin-top: 40px;
 }

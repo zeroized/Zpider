@@ -27,7 +27,7 @@
                onclick="selectPanel('#content-confirm');loadConfirm()"
                data-toggle="tab" aria-controls="confirm-tab">
             <span class="glyphicon glyphicon-play"></span>
-            <span class="sidebar-label">创建爬虫</span>
+            <span class="sidebar-label">确认配置</span>
         </a></li>
     </ul>
 </div>

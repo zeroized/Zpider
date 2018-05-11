@@ -274,83 +274,81 @@ function saveAdvOpt(){
         maxPage: $("#adv-max-page").val(),
         politeWait: $("#adv-polite-wait").val()
     },function(data){
-        alert(JSON.stringify(data));
+        alert(JSON.stringify(data.message));
+        var advOpt=data.message.data;
+        $("#show-adv-workers").text(advOpt.workers);
+        $("#show-adv-max-depth").text(advOpt.maxDepth);
+        $("#show-adv-max-page").text(advOpt.maxPage);
+        $("#show-adv-polite-wait").text(advOpt.politeWait+"ms");
     })
 }
 
 function loadConfirm() {
-    // $("#seed-confirm>li").remove();
-    // var key, seeds = configs.seed;
-    // for (key in seeds) {
-    //     if (seeds.hasOwnProperty(key)) {
-    //         if (key !== 'id') {
-    //             $("#seed-confirm").append("<li class='list-group-item'>" + key + "</li>");
-    //         }
-    //     }
-    // }
-    // $("#domain-confirm>li").remove();
-    // var domains = configs.domain;
-    // for (key in domains) {
-    //     if (domains.hasOwnProperty(key)) {
-    //         if (key !== 'id') {
-    //             $("#domain-confirm").append("<li class='list-group-item'>" + key + "</li>");
-    //         }
-    //     }
-    // }
-    // $("#crawl-confirm>li").remove();
-    // var crawls = configs.crawl;
-    // for (key in crawls) {
-    //     if (crawls.hasOwnProperty(key)) {
-    //         if (key !== 'id') {
-    //             $("#crawl-confirm").append("<li class='list-group-item'>" + key + "</li>");
-    //         }
-    //     }
-    // }
-    // $("#column-confirm>tr").remove();
-    // var columns = configs.column;
-    // for (key in columns) {
-    //     if (columns.hasOwnProperty(key)) {
-    //         if (key !== 'id') {
-    //             $("#column-confirm").append("<tr>" +
-    //                 "<td>" + key + "</td>" +
-    //                 "<td>" + columns[key].type + "</td>" +
-    //                 "<td>" + columns[key].dom + "</td>" +
-    //                 "</tr>");
-    //         }
-    //     }
-    // }
     $.get("/crawl/config/confirm",function(data){
-        $("#seed-confirm>li").remove();
+        var name=data.message.data.name;
+        if (name) {
+            $("#confirm-basic-name").text(name);
+        }else{
+            $("#confirm-basic-name").html("<span style='color: red;' class='glyphicon glyphicon-exclamation-sign'></span><span>尚未命名</span>");
+        }
+
         var seeds=data.message.data.seeds;
-        seeds.forEach(function(e){
-            $("#seed-confirm").append("<li class='list-group-item'>" + e + "</li>");
-        });
-        $("#domain-confirm>li").remove();
+        setBasicConfigPanel("#seed-confirm",seeds);
+        setBasicConfirm($("#confirm-basic-seed-size"),seeds.length);
+
         var domains=data.message.data.allowDomains;
-        domains.forEach(function(e){
-            $("#domain-confirm").append("<li class='list-group-item'>" + e + "</li>");
-        });
-        $("#crawl-confirm>li").remove();
+        setBasicConfigPanel("#domain-confirm",domains);
+        setBasicConfirm($("#confirm-basic-domain-size"),domains.length);
+
         var crawls=data.message.data.crawlUrlPrefixes;
-        crawls.forEach(function(e){
-            $("#crawl-confirm").append("<li class='list-group-item'>" + e + "</li>");
-        });
-        $("#column-confirm>tr").remove();
+        setBasicConfigPanel("#crawl-confirm",crawls);
+        setBasicConfirm($("#confirm-basic-crawl-size"),crawls.length);
+
         var columns=data.message.data.columns;
-        columns.forEach(function(e){
-            $("#column-confirm").append("<tr>" +
-                "<td>" + e.column + "</td>" +
-                "<td>" + e.type + "</td>" +
-                "<td>" + e.rule + "</td>" +
-                "</tr>");
-        });
+        if (columns.length !== 0) {
+            $("#column-confirm").show();
+            $("#column-confirm>div>table>tbody>tr").remove();
+            var ele=$("#column-confirm>div>table>tbody");
+            columns.forEach(function(e){
+                ele.append("<tr>" +
+                    "<td>" + e.column + "</td>" +
+                    "<td>" + e.type + "</td>" +
+                    "<td class='table-column-rule'>" + e.rule + "</td>" +
+                    "</tr>");
+            });
+        }else{
+            $("#column-confirm").hide();
+        }
+        setBasicConfirm($("#confirm-basic-column-size"),columns.length);
+
         var advopt=data.message.data.advancedOpt;
         $("#confirm-adv-workers").text(advopt.workers);
         $("#confirm-adv-max-depth").text(advopt.maxDepth);
         $("#confirm-adv-max-page").text(advopt.maxPage);
-        $("#confirm-adv-polite-wait").text(advopt.politeWait);
-        var name=data.message.data.name;
+        $("#confirm-adv-polite-wait").text(advopt.politeWait+"ms");
     })
+}
+
+function setBasicConfigPanel(ele_id,array){
+    var panel_ele=$(ele_id);
+    var ele=$(ele_id+">div>ul");
+    if (array.length !== 0) {
+        panel_ele.show();
+        $(ele+">div>ul>li").remove();
+        array.forEach(function(e){
+            ele.append("<li class='list-group-item'>" + e + "</li>");
+        });
+    }else{
+        panel_ele.hide();
+    }
+}
+
+function setBasicConfirm(ele,value){
+    if (value !== 0) {
+        ele.text(value+"条目");
+    }else{
+        ele.html("<span style='color: red;' class='glyphicon glyphicon-exclamation-sign'></span><span>尚未添加</span>")
+    }
 }
 
 function startCrawler(e) {
@@ -436,6 +434,8 @@ function createCrawler(){
     $.get("/crawl/create",function(data){
         if (data.status === 1) {
             window.location.href="/list";
+        }else{
+            alert(data.message.error+"尚未完成");
         }
     })
 }

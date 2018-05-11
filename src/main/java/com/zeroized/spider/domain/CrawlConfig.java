@@ -12,7 +12,7 @@ public class CrawlConfig {
     private List<String> crawlUrlPrefixes;
     private List<Column> columns;
     private CrawlAdvConfig advancedOpt;
-    private String name;
+    private String name=null;
 
     public CrawlConfig() {
         seeds = new LinkedList<>();
@@ -84,5 +84,25 @@ public class CrawlConfig {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static String checkFinished(CrawlConfig config){
+        String checked="";
+        if (config.getName()==null){
+            checked+="爬虫名称 ";
+        }
+        if (config.getSeeds().size()==0){
+            checked+="种子地址 ";
+        }
+        if (config.getAllowDomains().size()==0){
+            checked+="允许访问的域名 ";
+        }
+        if (config.getCrawlUrlPrefixes().size()==0){
+            checked+="爬取地址前缀 ";
+        }
+        if (config.getColumns().size()==0){
+            checked+="字段 ";
+        }
+        return checked;
     }
 }

@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="adv-max-page">最大访问页面数</label>
                 <div class="col-sm-9">
-                    <input type="number" class="form-control" id="adv-max-page" value="500">
+                    <input type="number" class="form-control" id="adv-max-page" value="1000">
                 </div>
             </div>
             <div class="form-group">
@@ -43,5 +43,32 @@
                 </div>
             </div>
         </form>
+    </div>
+</div>
+<div class="col-sm-5">
+    <div class="panel panel-default basic-panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">高级设置</h3>
+        </div>
+        <table class="table adv-opt-table">
+            <tbody>
+            <tr>
+                <td>爬虫工人数</td>
+                <td id="show-adv-workers">1</td>
+            </tr>
+            <tr>
+                <td>最大爬取深度</td>
+                <td id="show-adv-max-depth">20</td>
+            </tr>
+            <tr>
+                <td>最大访问页面数</td>
+                <td id="show-adv-max-page">10000</td>
+            </tr>
+            <tr>
+                <td>等待时间</td>
+                <td id="show-adv-polite-wait">1000ms</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>

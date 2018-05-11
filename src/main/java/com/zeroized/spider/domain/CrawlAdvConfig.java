@@ -4,10 +4,10 @@ package com.zeroized.spider.domain;
  * Created by Zero on 2018/4/6.
  */
 public class CrawlAdvConfig {
-    private int workers;
-    private int maxDepth;
-    private int maxPage;
-    private int politeWait;
+    private int workers=1;
+    private int maxDepth=10;
+    private int maxPage=1000;
+    private int politeWait=1000;
 
     public CrawlAdvConfig() {
     }

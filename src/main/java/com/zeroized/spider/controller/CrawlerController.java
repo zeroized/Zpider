@@ -6,7 +6,6 @@ import com.zeroized.spider.domain.CrawlConfig;
 import com.zeroized.spider.logic.CrawlerStarter;
 import com.zeroized.spider.logic.module.CrawlerPoolService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -87,10 +86,10 @@ public class CrawlerController {
     }
 
     @PostMapping("/config/basic/column/{operate}")
-    public MessageBean configBasic(@PathVariable("operate") String operate,
-                                   @RequestParam String value, @RequestParam(required = false) String rule,
-                                   @RequestParam(required = false) String type,
-                                   @ModelAttribute("crawlerConfig") CrawlConfig crawlConfig) {
+    public MessageBean configColumn(@PathVariable("operate") String operate,
+                                    @RequestParam String value, @RequestParam(required = false) String rule,
+                                    @RequestParam(required = false) String type,
+                                    @ModelAttribute("crawlerConfig") CrawlConfig crawlConfig) {
         MessageBean messageBean;
         List<Column> columns = crawlConfig.getColumns();
         switch (operate) {
@@ -194,12 +193,17 @@ public class CrawlerController {
 
     @GetMapping("/create")
     public MessageBean create(@ModelAttribute("crawlerConfig") CrawlConfig crawlConfig,
-                              ModelMap modelMap, SessionStatus sessionStatus) throws Exception {
-        crawlerPoolService.register(crawlConfig);
-
-        MessageBean messageBean = MessageBean.successBean();
-        modelMap.remove("crawlerConfig");
-//        sessionStatus.setComplete();
+                              SessionStatus sessionStatus) throws Exception {
+        MessageBean messageBean;
+        String checked=CrawlConfig.checkFinished(crawlConfig);
+        if (checked.equals("")) {
+            crawlerPoolService.register(crawlConfig);
+            messageBean = MessageBean.successBean();
+            sessionStatus.setComplete();
+        }else{
+            messageBean=MessageBean.errorBean();
+            messageBean.getMessage().put("error",checked);
+        }
         return messageBean;
     }
 }
