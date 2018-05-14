@@ -1,6 +1,8 @@
 package com.zeroized.spider.crawler;
 
 import com.zeroized.spider.domain.Column;
+import com.zeroized.spider.domain.DistributedPageFetcher;
+import com.zeroized.spider.domain.DistributedProxyItem;
 import com.zeroized.spider.domain.observable.DataEntity;
 import com.zeroized.spider.domain.observable.ImageEntity;
 import com.zeroized.spider.domain.observable.WarningEntity;
@@ -15,6 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -23,10 +26,39 @@ import java.util.*;
 public class Crawler extends WebCrawler {
     private CrawlerOptions crawlerOptions;
     private CrawlerObservable crawlerObservable;
+    private Field pageFetcherField;
+    private DistributedProxyItem proxyItem = null;//这儿是要代理的方法，可以根据MyId来设置并获取
+
 
     Crawler(CrawlerOptions crawlerOptions, CrawlerObservable crawlerObservable) {
         this.crawlerOptions = crawlerOptions;
         this.crawlerObservable = crawlerObservable;
+        try {
+            pageFetcherField = WebCrawler.class.getDeclaredField("pageFetcher");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 将原有的PageFetcher替换成含有代理的PageFetcher
+     */
+    @Override
+    public void onStart() {
+        if (proxyItem != null && proxyItem.getHost() != null) {
+            pageFetcherField.setAccessible(true);
+            try {
+                Object oldPageFetcherObj = pageFetcherField.get(this);
+                if (oldPageFetcherObj != null && oldPageFetcherObj.getClass().equals(DistributedPageFetcher.class)) {
+                    DistributedPageFetcher oldPageFetcher = (DistributedPageFetcher) oldPageFetcherObj;
+                    pageFetcherField.set(this, oldPageFetcher.getNewPageFetcher(proxyItem));//这儿设置代理
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } finally {
+                pageFetcherField.setAccessible(false);
+            }
+        }
     }
 
     @Override
