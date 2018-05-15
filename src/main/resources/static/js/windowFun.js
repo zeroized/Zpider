@@ -16,6 +16,9 @@ var configs = {
 function changeProtocol(protocol) {
     $("#protocol").text(protocol);
 }
+function changeThisProtocol(id,protocol) {
+    $(id).text(protocol);
+}
 
 function loadPage(url) {
     if (url) {
@@ -182,8 +185,9 @@ function removeTableRow(tableId, id) {
 
 function addSeed() {
     var seed = $("#seed-input").val();
+    var protocol=$("#protocol-seed").text();
     var id = configs.seed.id;
-    seed = "http://" + seed;
+    seed = protocol + seed;
     if (configs.seed[seed] === "") {
         alert("该种子地址已存在!");
     } else {
@@ -200,6 +204,8 @@ function addSeed() {
 
 function addDomain() {
     var domain = $("#domain-input").val();
+    var protocol=$("#protocol-domain").text();
+    domain=protocol+domain;
     var id = configs.domain.id;
     if (configs.domain[domain] === "") {
         alert("该允许访问域名已存在")
@@ -209,7 +215,7 @@ function addDomain() {
         configs.domain.id++;
     }
     $.post("/crawl/config/basic/domain/add", {
-        value: 'http://'+domain
+        value: domain
     }, function (data) {
         alert(JSON.stringify(data));
     });
@@ -217,6 +223,8 @@ function addDomain() {
 
 function addCrawl() {
     var crawl = $("#crawl-input").val();
+    var protocol=$("#protocol-crawl").text();
+    crawl=protocol+crawl;
     var id = configs.crawl.id;
     if (configs.crawl[crawl] === "") {
         alert("该爬取地址前缀已存在!");

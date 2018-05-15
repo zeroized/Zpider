@@ -30,7 +30,7 @@ public class PageController {
 
     @RequestMapping("/")
     public ModelAndView index() {
-        return new ModelAndView("select");
+        return new ModelAndView("index");
     }
 
     @RequestMapping("/create")
