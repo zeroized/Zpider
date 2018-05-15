@@ -209,7 +209,7 @@ function addDomain() {
         configs.domain.id++;
     }
     $.post("/crawl/config/basic/domain/add", {
-        value: domain
+        value: 'http://'+domain
     }, function (data) {
         alert(JSON.stringify(data));
     });

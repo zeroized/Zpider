@@ -5,6 +5,7 @@
     <title>index</title>
 </head>
 <body>
+<#include 'partial/nav.ftl'>
 Hello World
 </body>
 </html>

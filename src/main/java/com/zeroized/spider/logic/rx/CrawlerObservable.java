@@ -1,8 +1,10 @@
 package com.zeroized.spider.logic.rx;
 
+import com.zeroized.spider.domain.CrawlConfig;
 import com.zeroized.spider.domain.observable.DataEntity;
 import com.zeroized.spider.domain.observable.ImageEntity;
 import com.zeroized.spider.domain.observable.WarningEntity;
+import com.zeroized.spider.repository.CrawlConfigRepository;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -30,8 +32,11 @@ public class CrawlerObservable {
     private final Observable<List<DataEntity>> observable;
     private final PublishSubject<WarningEntity> warningSubject;
     private final PublishSubject<ImageEntity> imageSubject;
+    private final PublishSubject<CrawlConfig> crawlSubject;
     private Disposable dataDisposable;
     private Disposable imageDisposable;
+    private Disposable crawlDisposable;
+    private CrawlConfigRepository crawlConfigRepository;
 
     @Value("${rx.elasticsearch.time-span}")
     private int timeSpan;
@@ -45,17 +50,21 @@ public class CrawlerObservable {
         observable = dataSubject.buffer(timeSpan, TimeUnit.SECONDS, Schedulers.computation(), 60,
                 () -> Collections.synchronizedList(new LinkedList<>()), true);
         imageSubject = PublishSubject.create();
+        crawlSubject =PublishSubject.create();
     }
 
     @PostConstruct
     public void init() {
         dataDisposable = dataSubject.subscribe(x -> writeLog(x.toString(), "data"));
         imageDisposable = imageSubject.subscribe(x -> writeLog(x.toString(), "image"));
+        crawlDisposable=crawlSubject.subscribe(x -> crawlConfigRepository.save(x));
     }
 
     public void productData(DataEntity data) {
         dataSubject.onNext(data);
     }
+
+    public void produceCrawl(CrawlConfig crawl){crawlSubject.onNext(crawl);}
 
     public void produceImage(ImageEntity image) {
         imageSubject.onNext(image);
