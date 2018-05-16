@@ -43,18 +43,33 @@ public class CrawlerPool {
 //        waitingList=new LinkedList<>();
     }
 
-    public String register(CrawlController crawlController, CrawlerFactory crawlerFactory, CrawlConfig crawlConfig) {
-        CrawlerInfo info = new CrawlerInfo(crawlController, crawlerFactory, crawlConfig);
+    public CrawlerInfo register(CrawlController crawlController, CrawlerFactory crawlerFactory, CrawlConfig crawlConfig) {
+        String uuidName = IdGenerator.generateUUID();
+        CrawlerInfo info = new CrawlerInfo(uuidName, crawlController, crawlerFactory, crawlConfig);
 //        if (currentCrawler==crawlerPoolConfig.getPoolSize()){
 //            waitingList.add(info);
 //            return;
 //        }
-        String uuidName = IdGenerator.generateUUID();
         int createStatus=addCrawlerToPool(uuidName, info);
         if (createStatus==SUCCESS) {
-            return uuidName;
+            return info;
         }else{
-            return "";
+            return null;
+        }
+    }
+
+    public CrawlerInfo register(String uuidName,int status,CrawlController crawlController, CrawlerFactory crawlerFactory, CrawlConfig crawlConfig) {
+        CrawlerInfo info = new CrawlerInfo(uuidName, crawlController, crawlerFactory, crawlConfig);
+        info.setStatus(status);
+//        if (currentCrawler==crawlerPoolConfig.getPoolSize()){
+//            waitingList.add(info);
+//            return;
+//        }
+        int createStatus=addCrawlerToPool(uuidName, info);
+        if (createStatus==SUCCESS) {
+            return info;
+        }else{
+            return null;
         }
     }
 

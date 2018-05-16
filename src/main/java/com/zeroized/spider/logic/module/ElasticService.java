@@ -4,6 +4,8 @@ import com.zeroized.spider.domain.observable.DataEntity;
 import com.zeroized.spider.logic.rx.CrawlerObservable;
 import com.zeroized.spider.repo.elastic.ElasticClient;
 import io.reactivex.disposables.Disposable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,10 @@ import java.util.List;
  */
 @Service
 public class ElasticService {
+    private static final Logger logger= LoggerFactory.getLogger(ElasticService.class);
+
     private final ElasticClient elasticClient;
+
     private final Disposable disposable;
 
     @Autowired
@@ -30,7 +35,8 @@ public class ElasticService {
             return;
         }
         try {
-            elasticClient.bulkIndex(docs);
+            List<String> bulkResult=elasticClient.bulkIndex(docs);
+            logger.info("{} docs indexed: {}",bulkResult.size(),bulkResult.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

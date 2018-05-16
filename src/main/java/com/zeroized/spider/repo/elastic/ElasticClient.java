@@ -37,10 +37,10 @@ public class ElasticClient {
     @Value("${elasticsearch.highRest.port:9200}")
     private int port;
 
-    @Value("${elasticsearch.default.index:food}")
+    @Value("${elasticsearch.default.index:'index'}")
     private String index;
 
-    @Value("${elasticsearch.default.type:food}")
+    @Value("${elasticsearch.default.type:'type'}")
     private String type;
 
     @PostConstruct
@@ -50,8 +50,8 @@ public class ElasticClient {
                         new HttpHost(host, port, "http")));
 //        try {
 //            if (highLevelClient.ping()) {
-//                logger.info("Elasticsearch server connected on " + host + ":" + port);
-//                logger.info("Current index is " + index);
+                logger.info("Elasticsearch server connected on " + host + ":" + port);
+                logger.info("Current index is " + index);
 //            }
 //        } catch (IOException e) {
 //            e.printStackTrace();

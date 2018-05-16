@@ -7,12 +7,13 @@ import com.zeroized.spider.crawler.CrawlerOptions;
 import com.zeroized.spider.domain.*;
 import com.zeroized.spider.logic.pool.CrawlerPool;
 import com.zeroized.spider.logic.rx.CrawlerObservable;
+import com.zeroized.spider.repo.mongo.CrawlerInfoRepo;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -30,47 +31,92 @@ public class CrawlerPoolService {
 
     private final CrawlControllerFactory crawlControllerFactory;
 
+    private final CrawlerInfoRepo crawlerInfoRepo;
+
     @Autowired
-    public CrawlerPoolService(CrawlerPool crawlerPool, CrawlerObservable crawlerObservable, CrawlControllerFactory crawlControllerFactory) {
+    public CrawlerPoolService(CrawlerPool crawlerPool, CrawlerObservable crawlerObservable, CrawlControllerFactory crawlControllerFactory, CrawlerInfoRepo crawlerInfoRepo) {
         this.crawlerPool = crawlerPool;
         this.crawlerObservable = crawlerObservable;
         this.crawlControllerFactory = crawlControllerFactory;
+        this.crawlerInfoRepo = crawlerInfoRepo;
     }
 
-    public String register(CrawlConfig crawlConfig) throws Exception {
-        CrawlController controller = configController(crawlConfig.getName(),
-                crawlConfig.getAdvancedOpt(), crawlConfig.getSeeds());
-        CrawlerFactory crawlerFactory = configCrawler(crawlConfig.getAllowDomains(),
-                crawlConfig.getCrawlUrlPrefixes(), crawlConfig.getColumns(), crawlConfig.getName());
-        return crawlerPool.register(controller, crawlerFactory, crawlConfig);
+    @PostConstruct
+    public void init() {
+        initPool();
+    }
+
+    public String register(CrawlConfig crawlConfig){
+        CrawlController controller = null;
+        try {
+            controller = configController(crawlConfig.getName(),
+                    crawlConfig.getAdvancedOpt(), crawlConfig.getSeeds());
+            CrawlerFactory crawlerFactory = configCrawler(crawlConfig.getAllowDomains(),
+                    crawlConfig.getCrawlUrlPrefixes(), crawlConfig.getColumns(), crawlConfig.getName());
+            CrawlerInfo info = crawlerPool.register(controller, crawlerFactory, crawlConfig);
+            if (info != null) {
+                crawlerInfoRepo.save(new CrawlerInfoEntity(info.getId(), info.getStatus(), info.getCrawlConfig()));
+                return info.getId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<CrawlerStatusInfo> getAllCrawler() {
-        Map<String, CrawlerInfo> crawlers = crawlerPool.getAll();
-        return crawlers.entrySet().stream()
+        List<CrawlerInfoEntity> crawlers = crawlerInfoRepo.findAll();
+        return crawlers.stream()
                 .map(x -> {
-                    String uuid = x.getKey();
-                    int status = x.getValue().getStatus();
-                    return statusToStatusInfo(uuid,status);
+                    String uuid = x.getId();
+                    int status = x.getStatus();
+                    return statusToStatusInfo(uuid, status);
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
     public int startCrawler(String uuid) {
-        return crawlerPool.changeStatus(uuid, CrawlerPool.START_CRAWLER);
+        int status = crawlerPool.changeStatus(uuid, CrawlerPool.START_CRAWLER);
+        return updateToDatabase(status, uuid);
     }
 
     public int stopCrawler(String uuid) {
-        return crawlerPool.changeStatus(uuid, CrawlerPool.STOP_CRAWLER);
+        int status = crawlerPool.changeStatus(uuid, CrawlerPool.STOP_CRAWLER);
+        return updateToDatabase(status, uuid);
     }
 
     public void getCrawlerStatus(String uuid) {
-        CrawlerInfo crawlerInfo=crawlerPool.get(uuid);
+        CrawlerInfo crawlerInfo = crawlerPool.get(uuid);
     }
 
-    public CrawlConfig getConfig(String uuid){
-        return crawlerPool.get(uuid).getCrawlConfig();
+    public CrawlConfig getConfig(String uuid) {
+        return crawlerInfoRepo.findById(uuid).get().getCrawlConfig();
+    }
+
+    private void initPool() {
+        List<CrawlerInfoEntity> crawlerInfoList = crawlerInfoRepo.findByStatus(CrawlerInfo.READY);
+        crawlerInfoList.forEach(this::register);
+    }
+
+    private String register(CrawlerInfoEntity crawlerInfoEntity) {
+        CrawlConfig crawlConfig = crawlerInfoEntity.getCrawlConfig();
+        CrawlController controller = null;
+        try {
+            controller = configController(crawlConfig.getName(),
+                    crawlConfig.getAdvancedOpt(), crawlConfig.getSeeds());
+            CrawlerFactory crawlerFactory = configCrawler(crawlConfig.getAllowDomains(),
+                    crawlConfig.getCrawlUrlPrefixes(), crawlConfig.getColumns(), crawlConfig.getName());
+            CrawlerInfo info = crawlerPool.register(crawlerInfoEntity.getId(), crawlerInfoEntity.getStatus(),
+                    controller, crawlerFactory, crawlConfig);
+            if (info != null) {
+                crawlerInfoRepo.save(new CrawlerInfoEntity(info.getId(), info.getStatus(), info.getCrawlConfig()));
+                return info.getId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private CrawlController configController(String name, CrawlAdvConfig advConfig, List<String> seeds) throws Exception {
@@ -93,10 +139,10 @@ public class CrawlerPoolService {
         return new CrawlerFactory(crawlerOptions, crawlerObservable);
     }
 
-    private static CrawlerStatusInfo statusToStatusInfo(String uuid,int status){
+    private static CrawlerStatusInfo statusToStatusInfo(String uuid, int status) {
         switch (status) {
             case CrawlerInfo.READY:
-                return new CrawlerStatusInfo(uuid,"就绪","启动,start;修改配置,revise;删除,delete");
+                return new CrawlerStatusInfo(uuid, "就绪", "启动,start;修改配置,revise;删除,delete");
             case CrawlerInfo.STARTED:
                 return new CrawlerStatusInfo(uuid, "运行中", "停止,stop;查看已有结果,show");
             case CrawlerInfo.ERROR:
@@ -104,10 +150,20 @@ public class CrawlerPoolService {
             case CrawlerInfo.FINISHED:
                 return new CrawlerStatusInfo(uuid, "完成", "查看结果,show");
             case CrawlerInfo.PENDING_PROCESS:
-                return new CrawlerStatusInfo(uuid,"待处理","查看待处理的事件,show");
+                return new CrawlerStatusInfo(uuid, "待处理", "查看待处理的事件,show");
             case CrawlerInfo.STOPPED:
                 return new CrawlerStatusInfo(uuid, "停止", "查看结果,show;继续,resume;重启,restart");
         }
         return null;
+    }
+
+    private int updateToDatabase(int status, String uuid) {
+        if (status == CrawlerPool.SUCCESS) {
+            CrawlerInfo crawlerInfo = crawlerPool.get(uuid);
+            crawlerInfoRepo.save(new CrawlerInfoEntity(crawlerInfo.getId(),
+                    crawlerInfo.getStatus(),
+                    crawlerInfo.getCrawlConfig()));
+        }
+        return status;
     }
 }

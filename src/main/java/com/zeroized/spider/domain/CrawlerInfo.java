@@ -16,13 +16,16 @@ public class CrawlerInfo {
 
     private int status;
 
+    private final String id;
+
     private final CrawlController crawlController;
 
     private final CrawlerFactory crawlerFactory;
 
     private final CrawlConfig crawlConfig;
 
-    public CrawlerInfo(CrawlController crawlController, CrawlerFactory crawlerFactory, CrawlConfig crawlConfig) {
+    public CrawlerInfo(String id, CrawlController crawlController, CrawlerFactory crawlerFactory, CrawlConfig crawlConfig) {
+        this.id = id;
         this.crawlController = crawlController;
         this.crawlerFactory = crawlerFactory;
         this.crawlConfig = crawlConfig;
@@ -49,5 +52,9 @@ public class CrawlerInfo {
 
     public CrawlConfig getCrawlConfig() {
         return crawlConfig;
+    }
+
+    public String getId() {
+        return id;
     }
 }

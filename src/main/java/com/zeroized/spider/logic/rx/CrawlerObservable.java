@@ -26,23 +26,26 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class CrawlerObservable {
     private static final Logger logger = LoggerFactory.getLogger(CrawlerObservable.class);
+
     private final PublishSubject<DataEntity> dataSubject;
+
     private final Observable<List<DataEntity>> observable;
+
     private final PublishSubject<WarningEntity> warningSubject;
+
     private final PublishSubject<ImageEntity> imageSubject;
+
     private Disposable dataDisposable;
+
     private Disposable imageDisposable;
 
-    @Value("${rx.elasticsearch.time-span}")
-    private int timeSpan;
+    private Disposable dataGroupDisposable;
 
-    @Value("${rx.elasticsearch.buffer-size}")
-    private int bufferSize;
-
-    public CrawlerObservable() {
+    public CrawlerObservable(@Value("${rx.elasticsearch.time-span}") int timeSpan,
+                             @Value("${rx.elasticsearch.buffer-size}") int bufferSize) {
         dataSubject = PublishSubject.create();
         warningSubject = PublishSubject.create();
-        observable = dataSubject.buffer(timeSpan, TimeUnit.SECONDS, Schedulers.computation(), 60,
+        observable = dataSubject.buffer(timeSpan, TimeUnit.SECONDS, Schedulers.computation(), bufferSize,
                 () -> Collections.synchronizedList(new LinkedList<>()), true);
         imageSubject = PublishSubject.create();
     }
@@ -50,6 +53,7 @@ public class CrawlerObservable {
     @PostConstruct
     public void init() {
         dataDisposable = dataSubject.subscribe(x -> writeLog(x.toString(), "data"));
+        dataGroupDisposable = observable.subscribe(x -> writeLog(x.toString(), "data group"));
         imageDisposable = imageSubject.subscribe(x -> writeLog(x.toString(), "image"));
     }
 
@@ -86,5 +90,6 @@ public class CrawlerObservable {
     public void destroy() {
         dataDisposable.dispose();
         imageDisposable.dispose();
+        dataGroupDisposable.dispose();
     }
 }
