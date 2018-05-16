@@ -37,12 +37,6 @@ public class ElasticClient {
     @Value("${elasticsearch.highRest.port:9200}")
     private int port;
 
-    @Value("${elasticsearch.default.index:'index'}")
-    private String index;
-
-    @Value("${elasticsearch.default.type:'type'}")
-    private String type;
-
     @PostConstruct
     public void init() {
         highLevelClient = new RestHighLevelClient(
@@ -50,8 +44,7 @@ public class ElasticClient {
                         new HttpHost(host, port, "http")));
 //        try {
 //            if (highLevelClient.ping()) {
-                logger.info("Elasticsearch server connected on " + host + ":" + port);
-                logger.info("Current index is " + index);
+        logger.info("Elasticsearch server connected on " + host + ":" + port);
 //            }
 //        } catch (IOException e) {
 //            e.printStackTrace();
@@ -62,7 +55,7 @@ public class ElasticClient {
         CreateIndexRequest indexRequest = new CreateIndexRequest(index);
     }
 
-    public String indexDoc(Map<String, ?> doc) throws IOException {
+    public String indexDoc(Map<String, ?> doc, String index, String type) throws IOException {
         IndexRequest indexRequest = new IndexRequest(index, type);
         indexRequest.source(doc);
         IndexResponse indexResponse = highLevelClient.index(indexRequest);
@@ -72,7 +65,7 @@ public class ElasticClient {
     public List<String> bulkIndex(List<DataEntity> docs) throws IOException {
         BulkRequest bulkRequest = new BulkRequest();
         for (DataEntity doc : docs) {
-            IndexRequest indexRequest = new IndexRequest(index, doc.getType(), doc.getId());
+            IndexRequest indexRequest = new IndexRequest(doc.getType(), doc.getType(), doc.getId());
             indexRequest.source(doc.getData());
             bulkRequest.add(indexRequest);
         }
@@ -82,7 +75,7 @@ public class ElasticClient {
                 .collect(Collectors.toList());
     }
 
-    public List<String> bulkIndex(List<Map<String, ?>> docs, String type) throws IOException {
+    public List<String> bulkIndex(List<Map<String, ?>> docs,String index, String type) throws IOException {
         BulkRequest bulkRequest = new BulkRequest();
         for (Map<String, ?> doc : docs) {
             IndexRequest indexRequest = new IndexRequest(index, type);
@@ -93,23 +86,6 @@ public class ElasticClient {
         return Arrays.stream(bulkResponse.getItems())
                 .map(BulkItemResponse::getId)
                 .collect(Collectors.toList());
-    }
-
-    public String getIndex() {
-        return index;
-    }
-
-    public void setIndex(String index) {
-        logger.info("Current index has changed from " + this.index + " to " + index);
-        this.index = index;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     @PreDestroy
