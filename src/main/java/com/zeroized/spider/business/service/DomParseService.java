@@ -16,7 +16,7 @@ public class DomParseService {
         Elements headCss = doc.head().select("link");
         for (Element css : headCss) {
             String href = css.attr("href");
-            String proxyHref = "http://localhost:8080/proxy?url=";
+            String proxyHref = "/proxy?url=";
             proxyHref = getProxy(domain, href, proxyHref);
             css.attr("href", proxyHref);
             css.attr("data-href", href);
@@ -25,7 +25,7 @@ public class DomParseService {
         for (Element js : headJs) {
             String src = js.attr("src");
             if (src != null && !src.equals("")) {
-                String proxySrc = "http://localhost:8080/proxy?url=";
+                String proxySrc = "/proxy?url=";
                 proxySrc = getProxy(domain, src, proxySrc);
                 js.attr("src", proxySrc);
                 js.attr("data-src", src);
@@ -34,7 +34,7 @@ public class DomParseService {
         Elements as = doc.body().select("a");
         for (Element a : as) {
             String href = a.attr("href");
-            String proxyHref = "http://localhost:8080/load?url=";
+            String proxyHref = "/load?url=";
             proxyHref = getProxy(domain, href, proxyHref);
             a.attr("href", "#");
             a.attr("data-href", proxyHref);

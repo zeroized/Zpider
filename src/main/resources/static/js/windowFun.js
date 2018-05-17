@@ -27,7 +27,7 @@ function loadPage(url) {
         $("#url").val(url);
     }
     var protocol = $("#protocol").text();
-    url = "http://localhost:8080/load?url=" + protocol + $("#url").val().replace(/&/g, '%26');
+    url = "/load?url=" + protocol + $("#url").val().replace(/&/g, '%26');
     $("#target_page").attr("src", url);
     // if (window.event) window.event.preventDefault();
     $("#loading").show();
