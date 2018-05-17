@@ -1,6 +1,6 @@
 package com.zeroized.spider.crawler;
 
-import com.zeroized.spider.domain.DistributedPageFetcher;
+import com.zeroized.spider.domain.crawler.DistributedPageFetcher;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;

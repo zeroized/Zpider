@@ -1,7 +1,7 @@
 package com.zeroized.spider.controller;
 
-import com.zeroized.spider.domain.CrawlConfig;
-import com.zeroized.spider.logic.module.DomParseService;
+import com.zeroized.spider.domain.crawler.CrawlConfig;
+import com.zeroized.spider.business.service.DomParseService;
 import com.zeroized.spider.util.HttpRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

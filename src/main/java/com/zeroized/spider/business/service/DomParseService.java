@@ -1,4 +1,4 @@
-package com.zeroized.spider.logic.module;
+package com.zeroized.spider.business.service;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

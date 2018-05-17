@@ -1,16 +1,14 @@
 package com.zeroized.spider.controller;
 
-import com.zeroized.spider.domain.Column;
-import com.zeroized.spider.domain.CrawlAdvConfig;
-import com.zeroized.spider.domain.CrawlConfig;
-import com.zeroized.spider.logic.CrawlerStarter;
-import com.zeroized.spider.logic.module.CrawlerPoolService;
+import com.zeroized.spider.business.service.CrawlerPoolService;
+import com.zeroized.spider.domain.crawler.Column;
+import com.zeroized.spider.domain.crawler.CrawlAdvConfig;
+import com.zeroized.spider.domain.crawler.CrawlConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Zero on 2018/3/23.
@@ -20,13 +18,10 @@ import java.util.stream.Collectors;
 @SessionAttributes("crawlerConfig")
 public class CrawlerController {
 
-    private final CrawlerStarter crawlerStarter;
-
     private final CrawlerPoolService crawlerPoolService;
 
     @Autowired
-    public CrawlerController(CrawlerStarter crawlerStarter, CrawlerPoolService crawlerPoolService) {
-        this.crawlerStarter = crawlerStarter;
+    public CrawlerController(CrawlerPoolService crawlerPoolService) {
         this.crawlerPoolService = crawlerPoolService;
     }
 
@@ -145,50 +140,6 @@ public class CrawlerController {
         MessageBean messageBean = MessageBean.successBean();
         messageBean.getMessage().put("data", crawlConfig);
         return messageBean;
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "/start")
-    public String setup(@RequestBody CrawlConfig crawlConfig) throws Exception {
-//        System.out.println("/crawl/start visited");
-        List<String> seeds = crawlConfig.getSeeds();
-        List<String> allowDomains = crawlConfig.getAllowDomains()
-                .stream()
-                .map(x -> x.startsWith("http://") ? x : "http://" + x)
-                .collect(Collectors.toList());
-        List<String> crawlUrlPrefixes = crawlConfig.getCrawlUrlPrefixes()
-                .stream()
-                .map(x -> x.startsWith("http://") ? x : "http://" + x)
-                .collect(Collectors.toList());
-
-        List<Column> columns = crawlConfig.getColumns();
-
-        crawlerStarter.start(crawlConfig.getName(), seeds, allowDomains,
-                crawlUrlPrefixes, columns, crawlConfig.getAdvancedOpt());
-//        CrawlControllerOptions options = CrawlControllerOptions.defaultOptions();
-//        options.setWorkers(crawlRequest.getAdvancedOpt().getWorkers());
-//        options.setDelay(crawlRequest.getAdvancedOpt().getPoliteWait());
-//        options.setDepth(crawlRequest.getAdvancedOpt().getMaxDepth());
-//        options.setPage(crawlRequest.getAdvancedOpt().getMaxPage());
-//        options.setDir(crawlRequest.getSpiderName() + "\\");
-//
-//        CrawlController crawlController = crawlControllerFactory.newController(options);
-//
-//        PublishSubject<Map<String, ?>> crawlSubject = PublishSubject.create();
-//        crawlSubject.buffer(60, TimeUnit.SECONDS, Schedulers.computation(), 20,
-//                () -> Collections.synchronizedList(new LinkedList<>()), true)
-//                .subscribeData(
-//                        elasticRepo::generateBulkIndex
-////                        System.out::println
-//                );
-//
-//        CrawlerOptions crawlerOptions = new CrawlerOptions(allowDomains, crawlUrlPrefixes, columns);
-//        System.out.println(crawlerOptions.toString());
-//        CrawlerFactory crawlerFactory = new CrawlerFactory(crawlerOptions, crawlSubject);
-//        for (String seed : seeds) {
-//            crawlController.addSeed(seed);
-//        }
-//        crawlController.startNonBlocking(crawlerFactory, options.getWorkers());
-        return "";
     }
 
     @GetMapping("/create")

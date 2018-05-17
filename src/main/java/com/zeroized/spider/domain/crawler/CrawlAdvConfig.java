@@ -1,4 +1,4 @@
-package com.zeroized.spider.domain;
+package com.zeroized.spider.domain.crawler;
 
 /**
  * Created by Zero on 2018/4/6.

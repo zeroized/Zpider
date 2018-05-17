@@ -1,7 +1,7 @@
-package com.zeroized.spider.logic.module;
+package com.zeroized.spider.business.service;
 
 import com.zeroized.spider.domain.observable.DataEntity;
-import com.zeroized.spider.logic.rx.CrawlerObservable;
+import com.zeroized.spider.business.rx.CrawlerObservable;
 import com.zeroized.spider.repo.elastic.ElasticClient;
 import io.reactivex.disposables.Disposable;
 import org.slf4j.Logger;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Zero on 2018/4/3.
@@ -40,6 +41,10 @@ public class ElasticService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Map<String, Object>> search(String uuid) throws IOException {
+        return elasticClient.matchQuery(uuid);
     }
 
     @PreDestroy

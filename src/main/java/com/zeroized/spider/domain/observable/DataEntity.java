@@ -7,18 +7,21 @@ import java.util.Map;
  * Created by Zero on 2018/3/23.
  */
 public class DataEntity {
+
     private String id;
+
+    private String indexId;
 
     private String type;
 
     private Map<String, List<String>> data;
 
-
     public DataEntity() {
     }
 
-    public DataEntity(String id, String type, Map<String, List<String>> data) {
+    public DataEntity(String id, String indexId, String type, Map<String, List<String>> data) {
         this.id = id;
+        this.indexId = indexId;
         this.type = type;
         this.data = data;
     }
@@ -54,5 +57,13 @@ public class DataEntity {
                 ", type='" + type + '\'' +
                 ", data=" + data +
                 '}';
+    }
+
+    public String getIndexId() {
+        return indexId;
+    }
+
+    public void setIndexId(String indexId) {
+        this.indexId = indexId;
     }
 }

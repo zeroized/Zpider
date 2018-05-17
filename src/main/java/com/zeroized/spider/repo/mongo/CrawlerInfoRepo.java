@@ -1,6 +1,6 @@
 package com.zeroized.spider.repo.mongo;
 
-import com.zeroized.spider.domain.CrawlerInfoEntity;
+import com.zeroized.spider.domain.repo.CrawlerInfoEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,10 +11,6 @@ import java.util.List;
  */
 @Repository
 public interface CrawlerInfoRepo extends MongoRepository<CrawlerInfoEntity,String> {
-//    void findAndModifyById(String id);
-
-    @Override
-    void deleteById(String s);
 
     List<CrawlerInfoEntity> findByStatus(int status);
 }

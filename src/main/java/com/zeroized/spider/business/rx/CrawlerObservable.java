@@ -1,4 +1,4 @@
-package com.zeroized.spider.logic.rx;
+package com.zeroized.spider.business.rx;
 
 import com.zeroized.spider.domain.observable.DataEntity;
 import com.zeroized.spider.domain.observable.ImageEntity;

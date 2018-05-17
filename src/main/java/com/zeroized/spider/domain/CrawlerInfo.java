@@ -1,6 +1,7 @@
 package com.zeroized.spider.domain;
 
 import com.zeroized.spider.crawler.CrawlerFactory;
+import com.zeroized.spider.domain.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 
 /**

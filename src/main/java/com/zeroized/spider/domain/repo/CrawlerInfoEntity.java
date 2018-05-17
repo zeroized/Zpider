@@ -1,5 +1,6 @@
-package com.zeroized.spider.domain;
+package com.zeroized.spider.domain.repo;
 
+import com.zeroized.spider.domain.crawler.CrawlConfig;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

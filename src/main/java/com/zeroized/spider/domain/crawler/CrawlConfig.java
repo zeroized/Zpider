@@ -1,4 +1,4 @@
-package com.zeroized.spider.domain;
+package com.zeroized.spider.domain.crawler;
 
 import java.util.LinkedList;
 import java.util.List;

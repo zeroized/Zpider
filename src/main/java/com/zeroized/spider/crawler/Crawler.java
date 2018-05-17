@@ -1,12 +1,12 @@
 package com.zeroized.spider.crawler;
 
-import com.zeroized.spider.domain.Column;
-import com.zeroized.spider.domain.DistributedPageFetcher;
-import com.zeroized.spider.domain.DistributedProxyItem;
+import com.zeroized.spider.domain.crawler.Column;
+import com.zeroized.spider.domain.crawler.DistributedPageFetcher;
+import com.zeroized.spider.domain.crawler.DistributedProxyItem;
 import com.zeroized.spider.domain.observable.DataEntity;
 import com.zeroized.spider.domain.observable.ImageEntity;
 import com.zeroized.spider.domain.observable.WarningEntity;
-import com.zeroized.spider.logic.rx.CrawlerObservable;
+import com.zeroized.spider.business.rx.CrawlerObservable;
 import com.zeroized.spider.util.IdGenerator;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
@@ -91,6 +91,7 @@ public class Crawler extends WebCrawler {
         Document doc = Jsoup.parse(html);
 
         DataEntity dataEntity = new DataEntity();
+        dataEntity.setIndexId(crawlerOptions.getIndexId());
         Map<String, List<String>> data = new HashMap<>();
         List<String> warningColumns = new LinkedList<>();
         List<String> images = new LinkedList<>();

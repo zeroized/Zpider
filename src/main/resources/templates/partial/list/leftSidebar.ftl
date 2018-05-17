@@ -11,5 +11,11 @@
             <span class="glyphicon glyphicon-dashboard"></span>
             <span class="sidebar-label">爬虫状态</span>
         </a></li>
+        <li><a href="#crawler-result" class="btn btn-default" id="crawler-result-nav"
+                              onclick="selectPanel('#crawler-result')"
+                              data-toggle="tab" aria-controls="crawler-result">
+            <span class="glyphicon glyphicon-dashboard"></span>
+            <span class="sidebar-label">查看结果</span>
+        </a></li>
     </ul>
 </div>

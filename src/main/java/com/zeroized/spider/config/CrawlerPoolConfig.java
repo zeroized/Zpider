@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CrawlerPoolConfig {
 
-    @Value("${crawler.pool.max-size:4}")
     private int poolSize;
 
-    public CrawlerPoolConfig() {
+    public CrawlerPoolConfig(@Value("${crawler.pool.max-size:4}") int poolSize) {
+        this.poolSize = poolSize;
     }
 
     public int getPoolSize() {

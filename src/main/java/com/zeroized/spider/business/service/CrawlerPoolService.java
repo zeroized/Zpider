@@ -1,13 +1,18 @@
-package com.zeroized.spider.logic.module;
+package com.zeroized.spider.business.service;
 
 import com.zeroized.spider.crawler.CrawlControllerFactory;
 import com.zeroized.spider.crawler.CrawlControllerOptions;
 import com.zeroized.spider.crawler.CrawlerFactory;
 import com.zeroized.spider.crawler.CrawlerOptions;
 import com.zeroized.spider.domain.*;
-import com.zeroized.spider.logic.pool.CrawlerPool;
-import com.zeroized.spider.logic.rx.CrawlerObservable;
+import com.zeroized.spider.domain.crawler.Column;
+import com.zeroized.spider.domain.crawler.CrawlAdvConfig;
+import com.zeroized.spider.domain.crawler.CrawlConfig;
+import com.zeroized.spider.domain.repo.CrawlerInfoEntity;
+import com.zeroized.spider.business.pool.CrawlerPool;
+import com.zeroized.spider.business.rx.CrawlerObservable;
 import com.zeroized.spider.repo.mongo.CrawlerInfoRepo;
+import com.zeroized.spider.util.IdGenerator;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,16 +51,20 @@ public class CrawlerPoolService {
         initPool();
     }
 
-    public String register(CrawlConfig crawlConfig){
+    public String register(CrawlConfig crawlConfig) {
+        String uuidName = IdGenerator.generateUUID();
         CrawlController controller = null;
         try {
             controller = configController(crawlConfig.getName(),
                     crawlConfig.getAdvancedOpt(), crawlConfig.getSeeds());
             CrawlerFactory crawlerFactory = configCrawler(crawlConfig.getAllowDomains(),
-                    crawlConfig.getCrawlUrlPrefixes(), crawlConfig.getColumns(), crawlConfig.getName());
-            CrawlerInfo info = crawlerPool.register(controller, crawlerFactory, crawlConfig);
+                    crawlConfig.getCrawlUrlPrefixes(), crawlConfig.getColumns(),
+                    uuidName, crawlConfig.getName());
+            CrawlerInfo info = crawlerPool.register(uuidName, CrawlerInfo.READY,
+                    controller, crawlerFactory, crawlConfig);
             if (info != null) {
-                crawlerInfoRepo.save(new CrawlerInfoEntity(info.getId(), info.getStatus(), info.getCrawlConfig()));
+                crawlerInfoRepo.save(new CrawlerInfoEntity(info.getId(), info.getStatus(),
+                        info.getCrawlConfig()));
                 return info.getId();
             }
         } catch (Exception e) {
@@ -106,11 +115,13 @@ public class CrawlerPoolService {
             controller = configController(crawlConfig.getName(),
                     crawlConfig.getAdvancedOpt(), crawlConfig.getSeeds());
             CrawlerFactory crawlerFactory = configCrawler(crawlConfig.getAllowDomains(),
-                    crawlConfig.getCrawlUrlPrefixes(), crawlConfig.getColumns(), crawlConfig.getName());
+                    crawlConfig.getCrawlUrlPrefixes(), crawlConfig.getColumns(),
+                    crawlerInfoEntity.getId(), crawlConfig.getName());
             CrawlerInfo info = crawlerPool.register(crawlerInfoEntity.getId(), crawlerInfoEntity.getStatus(),
                     controller, crawlerFactory, crawlConfig);
             if (info != null) {
-                crawlerInfoRepo.save(new CrawlerInfoEntity(info.getId(), info.getStatus(), info.getCrawlConfig()));
+                crawlerInfoRepo.save(new CrawlerInfoEntity(info.getId(), info.getStatus(),
+                        info.getCrawlConfig()));
                 return info.getId();
             }
         } catch (Exception e) {
@@ -134,8 +145,8 @@ public class CrawlerPoolService {
         return crawlController;
     }
 
-    private CrawlerFactory configCrawler(List<String> allowDomains, List<String> crawlUrlPrefixes, List<Column> columns, String name) {
-        CrawlerOptions crawlerOptions = new CrawlerOptions(allowDomains, crawlUrlPrefixes, columns, name);
+    private CrawlerFactory configCrawler(List<String> allowDomains, List<String> crawlUrlPrefixes, List<Column> columns, String indexId, String name) {
+        CrawlerOptions crawlerOptions = new CrawlerOptions(allowDomains, crawlUrlPrefixes, columns, indexId, name);
         return new CrawlerFactory(crawlerOptions, crawlerObservable);
     }
 

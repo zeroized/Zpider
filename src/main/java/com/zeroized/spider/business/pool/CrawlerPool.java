@@ -1,8 +1,8 @@
-package com.zeroized.spider.logic.pool;
+package com.zeroized.spider.business.pool;
 
 import com.zeroized.spider.config.CrawlerPoolConfig;
 import com.zeroized.spider.crawler.CrawlerFactory;
-import com.zeroized.spider.domain.CrawlConfig;
+import com.zeroized.spider.domain.crawler.CrawlConfig;
 import com.zeroized.spider.domain.CrawlerInfo;
 import com.zeroized.spider.util.IdGenerator;
 import edu.uci.ics.crawler4j.crawler.CrawlController;

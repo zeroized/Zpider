@@ -1,7 +1,7 @@
-package com.zeroized.spider.logic.module;
+package com.zeroized.spider.business.service;
 
 import com.zeroized.spider.domain.observable.ImageEntity;
-import com.zeroized.spider.logic.rx.CrawlerObservable;
+import com.zeroized.spider.business.rx.CrawlerObservable;
 import com.zeroized.spider.util.HttpRequestUtil;
 import io.reactivex.disposables.Disposable;
 import org.slf4j.Logger;

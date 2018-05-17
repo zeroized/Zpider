@@ -1,6 +1,6 @@
 package com.zeroized.spider.crawler;
 
-import com.zeroized.spider.domain.Column;
+import com.zeroized.spider.domain.crawler.Column;
 
 import java.util.List;
 
@@ -11,15 +11,17 @@ public class CrawlerOptions {
     private List<String> allowDomains;
     private List<String> crawlUrlPrefixes;
     private List<Column> columns;
+    private String indexId;
     private String type;
 
     public CrawlerOptions() {
     }
 
-    public CrawlerOptions(List<String> allowDomains, List<String> crawlUrlPrefixes, List<Column> columns, String type) {
+    public CrawlerOptions(List<String> allowDomains, List<String> crawlUrlPrefixes, List<Column> columns, String indexId, String type) {
         this.allowDomains = allowDomains;
         this.crawlUrlPrefixes = crawlUrlPrefixes;
         this.columns = columns;
+        this.indexId = indexId;
         this.type = type;
     }
 
@@ -62,5 +64,13 @@ public class CrawlerOptions {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getIndexId() {
+        return indexId;
+    }
+
+    public void setIndexId(String indexId) {
+        this.indexId = indexId;
     }
 }

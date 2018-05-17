@@ -1,4 +1,4 @@
-package com.zeroized.spider.domain;
+package com.zeroized.spider.domain.crawler;
 
 /**
  * 分布式爬虫项

@@ -8,8 +8,13 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,7 +70,7 @@ public class ElasticClient {
     public List<String> bulkIndex(List<DataEntity> docs) throws IOException {
         BulkRequest bulkRequest = new BulkRequest();
         for (DataEntity doc : docs) {
-            IndexRequest indexRequest = new IndexRequest(doc.getType(), doc.getType(), doc.getId());
+            IndexRequest indexRequest = new IndexRequest(doc.getIndexId(), doc.getType(), doc.getId());
             indexRequest.source(doc.getData());
             bulkRequest.add(indexRequest);
         }
@@ -86,6 +91,16 @@ public class ElasticClient {
         return Arrays.stream(bulkResponse.getItems())
                 .map(BulkItemResponse::getId)
                 .collect(Collectors.toList());
+    }
+
+    public List<Map<String,Object>> matchQuery(String index) throws IOException {
+        SearchRequest searchRequest=new SearchRequest(index);
+        SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse searchResponse=highLevelClient.search(searchRequest);
+        return Arrays.stream(searchResponse.getHits().getHits())
+                .map(SearchHit::getSourceAsMap).collect(Collectors.toList());
     }
 
     @PreDestroy

@@ -1,4 +1,4 @@
-package com.zeroized.spider.domain;
+package com.zeroized.spider.domain.crawler;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;

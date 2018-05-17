@@ -16,12 +16,15 @@
 <body>
 <#include 'partial/nav.ftl'>
 <div class="col-sm-2 sidebar sidebar-left" id="left">
-    <#include 'partial/list/leftSidebar.ftl'>
+<#include 'partial/list/leftSidebar.ftl'>
 </div>
 <div class="col-sm-10 content" id="content">
     <div class="tab-content row">
         <div role="tabpanel" class="tab-pane active" id="crawler-status">
-            <#include 'partial/list/crawlerStatus.ftl'>
+        <#include 'partial/list/crawlerStatus.ftl'>
+        </div>
+        <div role="tabpanel" class="tab-pane active" id="crawler-result">
+        <#include 'partial/list/crawlerResult.ftl'>
         </div>
     </div>
 </div>

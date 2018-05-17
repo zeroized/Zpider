@@ -1,8 +1,9 @@
 package com.zeroized.spider.controller;
 
-import com.zeroized.spider.domain.CrawlConfig;
+import com.zeroized.spider.business.service.CrawlerPoolService;
+import com.zeroized.spider.business.service.ElasticService;
 import com.zeroized.spider.domain.CrawlerStatusInfo;
-import com.zeroized.spider.logic.module.CrawlerPoolService;
+import com.zeroized.spider.domain.crawler.CrawlConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Zero on 2018/5/9.
@@ -24,9 +27,12 @@ public class MonitorController {
 
     private final CrawlerPoolService crawlerPoolService;
 
+    private final ElasticService elasticService;
+
     @Autowired
-    public MonitorController(CrawlerPoolService crawlerPoolService) {
+    public MonitorController(CrawlerPoolService crawlerPoolService, ElasticService elasticService) {
         this.crawlerPoolService = crawlerPoolService;
+        this.elasticService = elasticService;
     }
 
     @RequestMapping("/all")
@@ -74,6 +80,20 @@ public class MonitorController {
             messageBean= MessageBean.successBean();
         }else{
             messageBean= MessageBean.errorBean();
+        }
+        return messageBean;
+    }
+
+    @RequestMapping("/opt/show")
+    public MessageBean result(@RequestParam String uuid){
+        MessageBean messageBean;
+        try {
+            List<Map<String,Object>> result= elasticService.search(uuid);
+            messageBean=MessageBean.successBean();
+            messageBean.getMessage().put("data",result);
+        } catch (IOException e) {
+            e.printStackTrace();
+            messageBean=MessageBean.errorBean();
         }
         return messageBean;
     }
