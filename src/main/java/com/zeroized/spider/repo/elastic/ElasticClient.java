@@ -6,6 +6,7 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -56,12 +57,26 @@ public class ElasticClient {
 //        }
     }
 
-    public void createIndex(String index) {
+    public void createIndex(String index) throws IOException {
         CreateIndexRequest indexRequest = new CreateIndexRequest(index);
+        highLevelClient.indices().create(indexRequest);
+//        highLevelClient.indices()
     }
 
-    public String indexDoc(Map<String, ?> doc, String index, String type) throws IOException {
-        IndexRequest indexRequest = new IndexRequest(index, type);
+    public boolean indexExists(String index){
+//        try {
+//            indexDoc(new HashMap<>(),index,"1");
+//            delete(index,"1");
+//            return true;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+        return true;
+    }
+
+    public String indexDoc(Map<String, ?> doc, String index,String id) throws IOException {
+        IndexRequest indexRequest = new IndexRequest(index, "doc",id);
         indexRequest.source(doc);
         IndexResponse indexResponse = highLevelClient.index(indexRequest);
         return indexResponse.getId();
@@ -70,7 +85,7 @@ public class ElasticClient {
     public List<String> bulkIndex(List<DataEntity> docs) throws IOException {
         BulkRequest bulkRequest = new BulkRequest();
         for (DataEntity doc : docs) {
-            IndexRequest indexRequest = new IndexRequest(doc.getIndexId(), doc.getType(), doc.getId());
+            IndexRequest indexRequest = new IndexRequest(doc.getIndexId(), "doc", doc.getId());
             indexRequest.source(doc.getData());
             bulkRequest.add(indexRequest);
         }
@@ -80,10 +95,10 @@ public class ElasticClient {
                 .collect(Collectors.toList());
     }
 
-    public List<String> bulkIndex(List<Map<String, ?>> docs,String index, String type) throws IOException {
+    public List<String> bulkIndex(List<Map<String, ?>> docs,String index) throws IOException {
         BulkRequest bulkRequest = new BulkRequest();
         for (Map<String, ?> doc : docs) {
-            IndexRequest indexRequest = new IndexRequest(index, type);
+            IndexRequest indexRequest = new IndexRequest(index, "doc");
             indexRequest.source(doc);
             bulkRequest.add(indexRequest);
         }
@@ -91,6 +106,11 @@ public class ElasticClient {
         return Arrays.stream(bulkResponse.getItems())
                 .map(BulkItemResponse::getId)
                 .collect(Collectors.toList());
+    }
+
+    public void delete(String index,String id) throws IOException {
+        DeleteRequest deleteRequest=new DeleteRequest(index,"doc",id);
+        highLevelClient.delete(deleteRequest);
     }
 
     public List<Map<String,Object>> matchQuery(String index) throws IOException {

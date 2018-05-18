@@ -194,7 +194,6 @@ textarea {
 .table-column-rule {
     text-overflow: ellipsis;
     overflow-x: hidden;
-    word-break: keep-all;
 }
 
 .create-crawler {
@@ -205,6 +204,15 @@ textarea {
     cursor: pointer;
 }
 
-.table >tbody>tr>td{
+.table > tbody > tr > td {
     vertical-align: middle;
+}
+
+.table-result {
+    /*table-layout: fixed;*/
+}
+
+.table-result > tbody > tr > td {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

@@ -2,8 +2,10 @@ package com.zeroized.spider.controller;
 
 import com.zeroized.spider.business.service.CrawlerPoolService;
 import com.zeroized.spider.business.service.ElasticService;
+import com.zeroized.spider.business.service.MongoService;
 import com.zeroized.spider.domain.CrawlerStatusInfo;
 import com.zeroized.spider.domain.crawler.CrawlConfig;
+import com.zeroized.spider.domain.observable.DataEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Zero on 2018/5/9.
@@ -29,10 +29,13 @@ public class MonitorController {
 
     private final ElasticService elasticService;
 
+    private final MongoService mongoService;
+
     @Autowired
-    public MonitorController(CrawlerPoolService crawlerPoolService, ElasticService elasticService) {
+    public MonitorController(CrawlerPoolService crawlerPoolService, ElasticService elasticService, MongoService mongoService) {
         this.crawlerPoolService = crawlerPoolService;
         this.elasticService = elasticService;
+        this.mongoService = mongoService;
     }
 
     @RequestMapping("/all")
@@ -48,6 +51,14 @@ public class MonitorController {
         CrawlConfig crawlConfig= crawlerPoolService.getConfig(uuid);
         MessageBean messageBean=MessageBean.successBean();
         messageBean.getMessage().put("data",crawlConfig);
+        return messageBean;
+    }
+
+    @RequestMapping("/show/name")
+    public MessageBean showName(){
+        List<String> names=crawlerPoolService.getCrawlerNameWithResult();
+        MessageBean messageBean=MessageBean.successBean();
+        messageBean.getMessage().put("data",names);
         return messageBean;
     }
 
@@ -84,17 +95,24 @@ public class MonitorController {
         return messageBean;
     }
 
+    @RequestMapping("/opt/restart")
+    public MessageBean restart(@RequestParam String uuid){
+        MessageBean messageBean;
+        int statusCode=crawlerPoolService.restartCrawler(uuid);
+        if (statusCode==CrawlerPoolService.SUCCESS){
+            messageBean= MessageBean.successBean();
+        }else{
+            messageBean= MessageBean.errorBean();
+        }
+        return messageBean;
+    }
+
     @RequestMapping("/opt/show")
     public MessageBean result(@RequestParam String uuid){
         MessageBean messageBean;
-        try {
-            List<Map<String,Object>> result= elasticService.search(uuid);
-            messageBean=MessageBean.successBean();
-            messageBean.getMessage().put("data",result);
-        } catch (IOException e) {
-            e.printStackTrace();
-            messageBean=MessageBean.errorBean();
-        }
+        List<DataEntity> result=mongoService.findByCrawlerId(uuid);
+        messageBean=MessageBean.successBean();
+        messageBean.getMessage().put("data",result);
         return messageBean;
     }
 }

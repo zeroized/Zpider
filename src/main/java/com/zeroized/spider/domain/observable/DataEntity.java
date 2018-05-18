@@ -1,5 +1,7 @@
 package com.zeroized.spider.domain.observable;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import java.util.Map;
  */
 public class DataEntity {
 
+    @Id
     private String id;
 
     private String indexId;

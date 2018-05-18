@@ -38,9 +38,9 @@ function operate(url_tail, uuid) {
         loadResult(uuid);
     } else {
         $.get("/monitor/opt/" + url_tail + "?uuid=" + uuid, function (data) {
-            // alert(JSON.stringify(data));
+            alert(JSON.stringify(data));
             if (data.status === 1) {
-                // window.location.href="/list";
+                window.location.href="/list";
             }
         });
     }
@@ -94,22 +94,45 @@ function showConfig(event, uuid) {
     }
 }
 
+function loadSelect() {
+    $("#crawl-result-select>option").remove();
+    var select=$("#crawl-result-select");
+    // select.append("<option value='food'>food</option>");
+    $.get("/monitor/show/name", function (data) {
+        var list = data.message.data;
+        list.forEach(function (e) {
+            select.append("<option value='" + e + "'>" + e + "</option>");
+        })
+    })
+}
+
 function loadResult(uuid) {
+    if (!uuid) {
+        uuid = $("#crawl-result-select").val();
+    }
+    $("#crawl-result-table>thead>tr>td").remove();
+    $("#crawl-result-table>tbody>tr").remove();
     $.get("/monitor/opt/show?uuid=" + uuid, function (data) {
         var list = data.message.data;
-        for(var keyName in list[0]){
-            if (e.hasOwnProperty(key)){
-                $("#crawl-result-table>thead>tr").append("<td>"+e[keyName]+"</td>");
-            }
+        // alert(JSON.stringify(list));
+        var thead=$("#crawl-result-table>thead>tr");
+        thead.append("<td>序号</td>");
+        for (var keyName in list[0].data) {
+            // if (list[0].hasOwnProperty(keyName)) {
+                thead.append("<td>" + keyName + "</td>");
+            // }
         }
-        list.forEach(function(e){
-            var tr="<tr>";
-            for (var key in e){
-                if (e.hasOwnProperty(key)){
-                    tr=tr+"<td>"+e[key]+"</td>";
-                }
+        list.forEach(function (e,step) {
+            // alert(JSON.stringify(e));
+            var piece=e.data;
+            var tr = "<tr>" +
+                "<td>"+step+"</td>";
+            for (var key in piece) {
+                // if (piece.data.hasOwnProperty(key)) {
+                    tr = tr + "<td>" + piece[key] + "</td>";
+                // }
             }
-            tr=tr+"</tr>";
+            tr = tr + "</tr>";
             $("#crawl-result-table>tbody").append(tr);
         });
     });

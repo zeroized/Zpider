@@ -22,7 +22,7 @@ public class CrawlControllerFactory {
     @Value("${crawler.config.default.dir:'test\\'}")
     private String dir;
 
-    private boolean resumeable = false;
+    private boolean resumeable = true;
 
     @Value("${crawler.config.default.polite-wait:1000}")
     private int delay;

@@ -2,8 +2,8 @@ package com.zeroized.spider.business.pool;
 
 import com.zeroized.spider.config.CrawlerPoolConfig;
 import com.zeroized.spider.crawler.CrawlerFactory;
-import com.zeroized.spider.domain.crawler.CrawlConfig;
 import com.zeroized.spider.domain.CrawlerInfo;
+import com.zeroized.spider.domain.crawler.CrawlConfig;
 import com.zeroized.spider.util.IdGenerator;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ public class CrawlerPool {
 
     public static final int START_CRAWLER = 1;
     public static final int STOP_CRAWLER = 2;
+    public static final int RESTART_CRAWLER = 4;
 
     private final CrawlerPoolConfig crawlerPoolConfig;
 
@@ -50,30 +51,30 @@ public class CrawlerPool {
 //            waitingList.add(info);
 //            return;
 //        }
-        int createStatus=addCrawlerToPool(uuidName, info);
-        if (createStatus==SUCCESS) {
+        int createStatus = addCrawlerToPool(uuidName, info);
+        if (createStatus == SUCCESS) {
             return info;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public CrawlerInfo register(String uuidName,int status,CrawlController crawlController, CrawlerFactory crawlerFactory, CrawlConfig crawlConfig) {
+    public CrawlerInfo register(String uuidName, int status, CrawlController crawlController, CrawlerFactory crawlerFactory, CrawlConfig crawlConfig) {
         CrawlerInfo info = new CrawlerInfo(uuidName, crawlController, crawlerFactory, crawlConfig);
         info.setStatus(status);
 //        if (currentCrawler==crawlerPoolConfig.getPoolSize()){
 //            waitingList.add(info);
 //            return;
 //        }
-        int createStatus=addCrawlerToPool(uuidName, info);
-        if (createStatus==SUCCESS) {
+        int createStatus = addCrawlerToPool(uuidName, info);
+        if (createStatus == SUCCESS) {
             return info;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public Map<String, CrawlerInfo> getAll(){
+    public Map<String, CrawlerInfo> getAll() {
         return pool;
     }
 
@@ -89,6 +90,8 @@ public class CrawlerPool {
                     return start(targetCrawler);
                 case STOP_CRAWLER:
                     return stop(targetCrawler);
+                case RESTART_CRAWLER:
+                    return start(targetCrawler);
             }
         }
         return ERROR;
@@ -104,22 +107,21 @@ public class CrawlerPool {
     }
 
     private int start(CrawlerInfo crawler) {
+        crawler.setStatus(CrawlerInfo.STARTED);
         CrawlerFactory factory = crawler.getCrawlerFactory();
         crawler.getCrawlController().startNonBlocking(factory, crawler.getCrawlConfig().getAdvancedOpt().getWorkers());
-        crawler.setStatus(CrawlerInfo.STARTED);
         return SUCCESS;
     }
 
     private int stop(CrawlerInfo crawler) {
+        crawler.setStatus(CrawlerInfo.STOPPED);
         CrawlController controller = crawler.getCrawlController();
         controller.shutdown();
         controller.waitUntilFinish();
-        crawler.setStatus(CrawlerInfo.STOPPED);
         return SUCCESS;
     }
 
     private boolean verifyStatusChange(int oldStatus, int operate) {
         return operate == oldStatus + 1;
     }
-
 }

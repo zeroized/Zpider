@@ -13,4 +13,8 @@ import java.util.List;
 public interface CrawlerInfoRepo extends MongoRepository<CrawlerInfoEntity,String> {
 
     List<CrawlerInfoEntity> findByStatus(int status);
+
+    List<CrawlerInfoEntity> findByStatusIsNot(int status);
+
+    List<CrawlerInfoEntity> findByStatusOrStatus(int status, int status2);
 }

@@ -1,16 +1,18 @@
 package com.zeroized.spider.business.service;
 
+import com.zeroized.spider.business.pool.CrawlerPool;
+import com.zeroized.spider.business.rx.CrawlerObservable;
 import com.zeroized.spider.crawler.CrawlControllerFactory;
 import com.zeroized.spider.crawler.CrawlControllerOptions;
 import com.zeroized.spider.crawler.CrawlerFactory;
 import com.zeroized.spider.crawler.CrawlerOptions;
-import com.zeroized.spider.domain.*;
+import com.zeroized.spider.domain.CrawlerInfo;
+import com.zeroized.spider.domain.CrawlerStatusInfo;
 import com.zeroized.spider.domain.crawler.Column;
 import com.zeroized.spider.domain.crawler.CrawlAdvConfig;
 import com.zeroized.spider.domain.crawler.CrawlConfig;
+import com.zeroized.spider.domain.observable.DataEntity;
 import com.zeroized.spider.domain.repo.CrawlerInfoEntity;
-import com.zeroized.spider.business.pool.CrawlerPool;
-import com.zeroized.spider.business.rx.CrawlerObservable;
 import com.zeroized.spider.repo.mongo.CrawlerInfoRepo;
 import com.zeroized.spider.util.IdGenerator;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,12 +41,15 @@ public class CrawlerPoolService {
 
     private final CrawlerInfoRepo crawlerInfoRepo;
 
+    private final MongoService mongoService;
+
     @Autowired
-    public CrawlerPoolService(CrawlerPool crawlerPool, CrawlerObservable crawlerObservable, CrawlControllerFactory crawlControllerFactory, CrawlerInfoRepo crawlerInfoRepo) {
+    public CrawlerPoolService(CrawlerPool crawlerPool, CrawlerObservable crawlerObservable, CrawlControllerFactory crawlControllerFactory, CrawlerInfoRepo crawlerInfoRepo, MongoService mongoService) {
         this.crawlerPool = crawlerPool;
         this.crawlerObservable = crawlerObservable;
         this.crawlControllerFactory = crawlControllerFactory;
         this.crawlerInfoRepo = crawlerInfoRepo;
+        this.mongoService = mongoService;
     }
 
     @PostConstruct
@@ -53,7 +59,7 @@ public class CrawlerPoolService {
 
     public String register(CrawlConfig crawlConfig) {
         String uuidName = IdGenerator.generateUUID();
-        CrawlController controller = null;
+        CrawlController controller;
         try {
             controller = configController(crawlConfig.getName(),
                     crawlConfig.getAdvancedOpt(), crawlConfig.getSeeds());
@@ -65,6 +71,7 @@ public class CrawlerPoolService {
             if (info != null) {
                 crawlerInfoRepo.save(new CrawlerInfoEntity(info.getId(), info.getStatus(),
                         info.getCrawlConfig()));
+//                elasticService.createIndex(uuidName);
                 return info.getId();
             }
         } catch (Exception e) {
@@ -85,6 +92,11 @@ public class CrawlerPoolService {
                 .collect(Collectors.toList());
     }
 
+    public List<String> getCrawlerNameWithResult(){
+        return crawlerInfoRepo.findByStatusIsNot(CrawlerInfo.READY).stream()
+                .map(CrawlerInfoEntity::getId).collect(Collectors.toList());
+    }
+
     public int startCrawler(String uuid) {
         int status = crawlerPool.changeStatus(uuid, CrawlerPool.START_CRAWLER);
         return updateToDatabase(status, uuid);
@@ -93,6 +105,11 @@ public class CrawlerPoolService {
     public int stopCrawler(String uuid) {
         int status = crawlerPool.changeStatus(uuid, CrawlerPool.STOP_CRAWLER);
         return updateToDatabase(status, uuid);
+    }
+
+    public int restartCrawler(String uuid){
+        int status=crawlerPool.changeStatus(uuid,CrawlerPool.RESTART_CRAWLER);
+        return updateToDatabase(status,uuid);
     }
 
     public void getCrawlerStatus(String uuid) {
@@ -104,7 +121,14 @@ public class CrawlerPoolService {
     }
 
     private void initPool() {
-        List<CrawlerInfoEntity> crawlerInfoList = crawlerInfoRepo.findByStatus(CrawlerInfo.READY);
+        List<CrawlerInfoEntity> allCrawlers=crawlerInfoRepo.findAll();
+        allCrawlers.forEach(x->{
+            List<DataEntity> testList=mongoService.findByCrawlerId(x.getId());
+            if (testList.size()==0&&x.getStatus()!=CrawlerInfo.READY){
+                crawlerInfoRepo.deleteById(x.getId());
+            }
+        });
+        List<CrawlerInfoEntity> crawlerInfoList = crawlerInfoRepo.findByStatusOrStatus(CrawlerInfo.READY,CrawlerInfo.STOPPED);
         crawlerInfoList.forEach(this::register);
     }
 
@@ -176,5 +200,11 @@ public class CrawlerPoolService {
                     crawlerInfo.getCrawlConfig()));
         }
         return status;
+    }
+
+    @PreDestroy
+    private void destroy(){
+        List<CrawlerInfoEntity> entities=crawlerInfoRepo.findByStatus(CrawlerInfo.STARTED);
+        entities.forEach(x->stopCrawler(x.getId()));
     }
 }

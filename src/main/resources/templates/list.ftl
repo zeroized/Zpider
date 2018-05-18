@@ -23,7 +23,7 @@
         <div role="tabpanel" class="tab-pane active" id="crawler-status">
         <#include 'partial/list/crawlerStatus.ftl'>
         </div>
-        <div role="tabpanel" class="tab-pane active" id="crawler-result">
+        <div role="tabpanel" class="tab-pane" id="crawler-result">
         <#include 'partial/list/crawlerResult.ftl'>
         </div>
     </div>
